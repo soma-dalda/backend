@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import shop.dalda.template.Template;
-import shop.dalda.template.User;
+import shop.dalda.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

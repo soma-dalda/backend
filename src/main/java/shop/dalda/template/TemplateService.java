@@ -16,6 +16,8 @@ import shop.dalda.exception.template.TemplateInvalidException;
 import shop.dalda.exception.UserNotFoundException;
 import shop.dalda.template.dto.request.TemplateUpdateRequestDto;
 import shop.dalda.template.dto.response.TemplateUpdateResponseDto;
+import shop.dalda.user.domain.User;
+import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;

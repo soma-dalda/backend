@@ -1,7 +1,7 @@
 package shop.dalda.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import shop.dalda.template.User;
+import shop.dalda.user.domain.User;
 
 import java.util.List;
 

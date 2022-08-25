@@ -3,6 +3,7 @@ package shop.dalda.template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import shop.dalda.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
