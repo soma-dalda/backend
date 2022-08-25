@@ -2,10 +2,7 @@ package shop.dalda.order;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.UserNotFoundException;
 import shop.dalda.exception.template.OrderNotFoundException;
@@ -16,8 +13,8 @@ import shop.dalda.order.dto.response.OrderListForConsumerResponseDto;
 import shop.dalda.order.dto.response.OrderResponseDto;
 import shop.dalda.template.Template;
 import shop.dalda.template.TemplateRepository;
-import shop.dalda.template.User;
-import shop.dalda.template.UserRepository;
+import shop.dalda.user.domain.User;
+import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
