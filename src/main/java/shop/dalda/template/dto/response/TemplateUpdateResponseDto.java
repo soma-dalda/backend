@@ -5,23 +5,26 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.json.simple.JSONArray;
 
-import java.time.LocalDateTime;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TemplateUpdateResponseDto {
 
     private Long id;
-    private Long user;
+    private Long userId;
+    private String title;
     private JSONArray content;
 
     public Long getId() {
         return id;
     }
 
-    public Long getUser() {
-        return user;
+    public String getTitle() {
+        return title;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     public JSONArray getContent() {

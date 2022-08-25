@@ -7,18 +7,20 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
-import shop.dalda.exception.TemplateNotBelongToUserException;
-import shop.dalda.exception.TemplateNotFoundException;
+import shop.dalda.exception.template.TemplateNotBelongToUserException;
+import shop.dalda.exception.template.TemplateNotFoundException;
 import shop.dalda.template.dto.request.TemplateRequestDto;
+import shop.dalda.template.dto.response.TemplateListResponseDto;
 import shop.dalda.template.dto.response.TemplateResponseDto;
-import shop.dalda.exception.TemplateInvalidException;
+import shop.dalda.exception.template.TemplateInvalidException;
 import shop.dalda.exception.UserNotFoundException;
 import shop.dalda.template.dto.request.TemplateUpdateRequestDto;
 import shop.dalda.template.dto.response.TemplateUpdateResponseDto;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,10 +33,8 @@ public class TemplateService {
 
     public Long insertTemplate(TemplateRequestDto templateRequestDto) throws ParseException {
         // User 객체 생성
-        Optional<User> user = userRepository.findById(templateRequestDto.getCompanyId());
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("유저가 없다");
-        }
+        User user = userRepository.findById(templateRequestDto.getCompanyId())
+                .orElseThrow(UserNotFoundException::new);
 
         // Template 유효성 검사
         if (!isTemplateValid(templateRequestDto.getContent())) {
@@ -43,14 +43,16 @@ public class TemplateService {
 
         // Template 객체 생성
         Template template = Template.builder()
-                .user(user.get())
+                .user(user)
+                .title(templateRequestDto.getTitle())
                 .content(templateRequestDto.getContent())
                 .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
                 .build();
 
         // DB 저장
         templateRepository.save(template);
-        System.out.println(template);
+
         return template.getId();
     }
 
@@ -60,18 +62,17 @@ public class TemplateService {
      * @throws ParseException
      */
     private Boolean isTemplateValid(String content) throws ParseException {
-        JSONParser jsonParser = new JSONParser();
-        JSONArray jsonArr = (JSONArray) jsonParser.parse(content);
+        JSONArray jsonArray = convertStringToJsonArray(content);
 
         //각 질문마다 유효성 검사
-        for (Object obj : jsonArr) {
-            JSONObject jsonObj = (JSONObject) obj;
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
 
-            System.out.println(jsonObj.get("type"));
-            System.out.println(jsonObj.get("required"));
-            System.out.println(jsonObj.get("question"));
-            System.out.println(jsonObj.get("img"));
-            System.out.println(jsonObj.get("options"));
+            System.out.println(jsonObject.get("type"));
+            System.out.println(jsonObject.get("required"));
+            System.out.println(jsonObject.get("question"));
+            System.out.println(jsonObject.get("img"));
+            System.out.println(jsonObject.get("options"));
             System.out.println();
         }
 
@@ -84,36 +85,56 @@ public class TemplateService {
 
         return TemplateResponseDto.builder()
                 .id(template.getId())
-                .user(template.getUser().getId())
+                .userId(template.getUser().getId())
+                .title(template.getTitle())
                 .content(convertStringToJsonArray(template.getContent()))
                 .createdAt(template.getCreatedAt())
                 .build();
     }
 
-    public TemplateUpdateResponseDto updateTemplate(Long userId,
-                                              Long templateId,
-                                              TemplateUpdateRequestDto templateUpdateRequestDto) throws ParseException {
-        //User 객체 생성
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new UserNotFoundException("유저가 없다");
+    public TemplateListResponseDto selectTemplateList(Long userId) throws ParseException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Template> templateList = templateRepository.findAllByUser(user);
+
+        List<JSONObject> templateListForResponse = new ArrayList<>();
+        for (Template template : templateList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", template.getId());
+            jsonObject.put("title", template.getTitle());
+            templateListForResponse.add(jsonObject);
         }
+
+        return TemplateListResponseDto.builder()
+                .userId(user.getId())
+                .templateList(templateListForResponse)
+                .build();
+    }
+
+    public TemplateUpdateResponseDto updateTemplate(Long userId,
+                                                    Long templateId,
+                                                    TemplateUpdateRequestDto templateUpdateRequestDto) throws ParseException {
+        //User 객체 생성
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
 
         // Template 조회
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(TemplateNotFoundException::new);
 
         // template 작성자 일치 여부 확인
-        if (!template.getUser().equals(user.get())) {
+        if (!template.getUser().equals(user)) {
             throw new TemplateNotBelongToUserException();
         }
 
         // template 수정
+        template.updateTitle(templateUpdateRequestDto.getTitle());
         template.updateContent(templateUpdateRequestDto.getContent());
 
         return TemplateUpdateResponseDto.builder()
                 .id(template.getId())
-                .user(template.getUser().getId())
+                .userId(template.getUser().getId())
                 .content(convertStringToJsonArray(template.getContent()))
                 .build();
     }

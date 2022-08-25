@@ -22,11 +22,17 @@ public class Template {
     @JoinColumn(name = "company_id")
     private User user;
 
+    @Column
+    private String title;
+
     @Column(columnDefinition = "json")
     private String content;
 
     @Column
     private LocalDateTime createdAt;
+
+    @Column
+    private LocalDateTime modifiedAt;
 
     public Long getId() {
         return id;
@@ -36,12 +42,24 @@ public class Template {
         return user;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public String getContent() {
         return content;
     }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
     }
 
     public void updateContent(String content) {

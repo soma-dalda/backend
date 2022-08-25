@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +13,8 @@ import java.time.LocalDateTime;
 public class TemplateResponseDto {
 
     private Long id;
-    private Long user;
+    private Long userId;
+    private String title;
     private JSONArray content;
     private LocalDateTime createdAt;
 
@@ -22,8 +22,12 @@ public class TemplateResponseDto {
         return id;
     }
 
-    public Long getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public JSONArray getContent() {
