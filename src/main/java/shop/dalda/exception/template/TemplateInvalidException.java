@@ -1,15 +1,14 @@
-package shop.dalda.exception;
-
+package shop.dalda.exception.template;
 
 import org.springframework.http.HttpStatus;
 
-public class TemplateNotFoundException extends RuntimeException {
+public class TemplateInvalidException extends RuntimeException {
 
-    private final String ERROR_CODE = "T002";
+    private final String ERROR_CODE = "T001";
     private final HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
-    private static final String MESSAGE = "템플릿을 찾을 수 없습니다.";
+    private static final String MESSAGE = "템플릿의 형식이 올바르지 않습니다.";
 
-    public TemplateNotFoundException() {
+    public TemplateInvalidException() {
         super(MESSAGE);
     }
 
@@ -21,4 +20,3 @@ public class TemplateNotFoundException extends RuntimeException {
         return HTTP_STATUS;
     }
 }
-

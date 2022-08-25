@@ -1,4 +1,4 @@
-package shop.dalda.exception;
+package shop.dalda.exception.template;
 
 import org.springframework.http.HttpStatus;
 

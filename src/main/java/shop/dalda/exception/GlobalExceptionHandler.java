@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import shop.dalda.exception.template.TemplateInvalidException;
+import shop.dalda.exception.template.TemplateNotBelongToUserException;
+import shop.dalda.exception.template.TemplateNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -35,5 +38,4 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .body(e.getErrorCode());
     }
-
 }
