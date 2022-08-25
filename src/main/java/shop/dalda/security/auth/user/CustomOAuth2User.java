@@ -2,7 +2,9 @@ package shop.dalda.security.auth.user;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import shop.dalda.user.domain.User;
