@@ -22,12 +22,26 @@ public class QUser extends EntityPathBase<User> {
 
     public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
 
+    public final ListPath<BusinessHour, SimplePath<BusinessHour>> businessHours = this.<BusinessHour, SimplePath<BusinessHour>>createList("businessHours", BusinessHour.class, SimplePath.class, PathInits.DIRECT2);
+
+    public final StringPath companyDomain = createString("companyDomain");
+
+    public final StringPath companyIntroduction = createString("companyIntroduction");
+
+    public final StringPath companyLocation = createString("companyLocation");
+
     public final StringPath companyName = createString("companyName");
+
+    public final StringPath companyPhone = createString("companyPhone");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final ListPath<CompanyLink, SimplePath<CompanyLink>> etcLinks = this.<CompanyLink, SimplePath<CompanyLink>>createList("etcLinks", CompanyLink.class, SimplePath.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath instaLink = createString("instaLink");
 
     public final DatePath<java.time.LocalDate> latestAt = createDate("latestAt", java.time.LocalDate.class);
 
@@ -36,17 +50,15 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath oauthId = createString("oauthId");
 
-    public final StringPath phone = createString("phone");
-
     public final StringPath profile = createString("profile");
 
     public final StringPath qnaLink = createString("qnaLink");
 
     public final EnumPath<Role> role = createEnum("role", Role.class);
 
-    public final ListPath<String, StringPath> urlList = this.<String, StringPath>createList("urlList", String.class, StringPath.class, PathInits.DIRECT2);
-
     public final StringPath username = createString("username");
+
+    public final StringPath userPhone = createString("userPhone");
 
     public final BooleanPath withdraw = createBoolean("withdraw");
 

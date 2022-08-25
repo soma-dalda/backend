@@ -3,6 +3,7 @@ package shop.dalda.security.jwt;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * Http Request Header에 Authorization : Bearer <JWT> 형태로 전송된 AccessToken을 검사하고,
  * 유효한다면 Authentication 객체를 SecurityContext에 저장한다.
  */
+@Profile("prod")
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

@@ -1,6 +1,7 @@
 package shop.dalda.security.auth;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * CRSF 공격을 방지하기 위한 redirectURI 를 체크하기 위한 용도로 활용한다.
  * 체크 후에는 바로 삭제됨
  */
+@Profile("prod")
 @Component
 public class CookieAuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
