@@ -3,6 +3,7 @@ package shop.dalda.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +18,8 @@ import shop.dalda.security.jwt.JwtAccessDeniedHandler;
 import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
 import shop.dalda.security.jwt.JwtAuthenticationFilter;
 
+
+@Profile("prod")
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration

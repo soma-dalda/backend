@@ -1,6 +1,7 @@
 package shop.dalda.util.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import shop.dalda.security.auth.user.CustomOAuth2User;

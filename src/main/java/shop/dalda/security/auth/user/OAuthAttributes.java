@@ -2,6 +2,7 @@ package shop.dalda.security.auth.user;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.context.annotation.Profile;
 import shop.dalda.user.domain.User;
 
 import java.util.Map;
