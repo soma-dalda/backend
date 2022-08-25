@@ -13,6 +13,7 @@ import java.io.IOException;
 /**
  * 사용자가 인증없이 요청시 401 처리
  */
+
 @Profile("prod")
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

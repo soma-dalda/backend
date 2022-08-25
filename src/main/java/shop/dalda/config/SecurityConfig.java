@@ -18,6 +18,7 @@ import shop.dalda.security.jwt.JwtAccessDeniedHandler;
 import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
 import shop.dalda.security.jwt.JwtAuthenticationFilter;
 
+
 @Profile("prod")
 @RequiredArgsConstructor
 @EnableWebSecurity
