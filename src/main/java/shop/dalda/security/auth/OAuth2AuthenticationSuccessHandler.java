@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -13,6 +14,7 @@ import shop.dalda.exception.BadRequestException;
 import shop.dalda.security.jwt.TokenProvider;
 import shop.dalda.util.CookieUtil;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +31,8 @@ import static shop.dalda.security.auth.CookieAuthorizationRequestRepository.REDI
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
-    private CookieAuthorizationRequestRepository authorizationRequestRepository;
-    private TokenProvider tokenProvider;
+    private final CookieAuthorizationRequestRepository authorizationRequestRepository;
+    private final TokenProvider tokenProvider;
     @Value("${app.oauth2.redirectUri")
     private String REDIRECT_URI;
 

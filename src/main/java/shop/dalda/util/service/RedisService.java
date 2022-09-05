@@ -13,7 +13,7 @@ import java.time.Duration;
 @Service
 public class RedisService {
 
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public void setValues(String key, String value) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();

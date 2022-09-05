@@ -1,13 +1,11 @@
 package shop.dalda.user.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import shop.dalda.user.domain.User;
 import shop.dalda.user.ui.dto.QUserCompanyResponse;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
 
 import javax.persistence.EntityManager;
 
-import java.util.List;
 
 import static shop.dalda.user.domain.QUser.user;
 
