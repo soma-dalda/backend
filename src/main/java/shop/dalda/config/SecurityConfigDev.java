@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Profile("dev")
 @EnableWebSecurity
 @Configuration
 public class SecurityConfigDev {
@@ -23,19 +24,6 @@ public class SecurityConfigDev {
         //접근권한
         http.authorizeRequests().anyRequest().permitAll();
 
-        http.httpBasic();
-
         return http.build();
     }
-
-//    @Order(0)
-//    @Bean
-//    public SecurityFilterChain resources(HttpSecurity http) throws Exception {
-//        http.requestMatchers(matchers -> matchers.antMatchers("/swagger-ui/**"))
-//                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-//                .requestCache().disable()
-//                .securityContext().disable()
-//                .sessionManagement().disable();
-//        return http.build();
-//    }
 }
