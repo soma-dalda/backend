@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class TokenProvider {
 
     private static final Logger log = LoggerFactory.getLogger(TokenProvider.class);
-    private RedisService redisService;
+    private final RedisService redisService;
 
     @Value("${app.auth.tokenExpiration}")
     private long TOKEN_EXPIRATION;
