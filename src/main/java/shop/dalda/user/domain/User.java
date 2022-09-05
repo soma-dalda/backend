@@ -2,23 +2,34 @@ package shop.dalda.user.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.*;
-import org.hibernate.annotations.Type;
-import shop.dalda.user.ui.dto.UserCompanyRequest;
-import shop.dalda.user.ui.dto.UserUpdateRequest;
+import shop.dalda.order.Order;
+import shop.dalda.template.Template;
+import shop.dalda.user.ui.dto.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "users")
 @Entity
 public class User extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "company")
+    private List<Order> orderedCompanyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "consumer")
+    private List<Order> orderedConsumerList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Template> templateList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
