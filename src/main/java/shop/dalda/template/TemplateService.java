@@ -70,6 +70,10 @@ public class TemplateService {
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
 
+            // 주관 장문
+            // singleObjective, multiObjective
+            // shortSubjective, longSubjective
+            // image
             System.out.println(jsonObject.get("type"));
             System.out.println(jsonObject.get("required"));
             System.out.println(jsonObject.get("question"));
