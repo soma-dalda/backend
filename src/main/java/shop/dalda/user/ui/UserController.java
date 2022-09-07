@@ -23,8 +23,6 @@ public class UserController {
     @PatchMapping()
     public void updateUser(UserUpdateRequest requestDto,
                            @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
-        System.out.println(SecurityContextHolder.getContext());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         userService.updateUser(currentUser, requestDto);
     }
 
