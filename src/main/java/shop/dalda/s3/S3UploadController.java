@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/img")
@@ -19,10 +18,10 @@ public class S3UploadController {
     private final S3UploadService s3UploadService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("images") MultipartFile multipartFile,
-                                             @RequestParam String fileSize) throws IOException {
-        String uploadUrl = s3UploadService.upload(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), fileSize);
+    public ResponseEntity<S3ResponseDto> uploadFile(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+        String uploadUrl = s3UploadService.upload(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), multipartFile.getSize());
+        S3ResponseDto s3ResponseDto = S3ResponseDto.builder().url(uploadUrl).build();
 
-        return ResponseEntity.created(URI.create(uploadUrl)).build();
+        return ResponseEntity.ok(s3ResponseDto);
     }
 }
