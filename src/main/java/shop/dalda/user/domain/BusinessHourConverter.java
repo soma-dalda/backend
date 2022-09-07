@@ -37,7 +37,6 @@ public class BusinessHourConverter implements AttributeConverter<List<?>, String
     @Override
     public List<BusinessHour> convertToEntityAttribute(String dbData) {
         try {
-
             return mapper.readValue(dbData, new TypeReference<>() {});
         } catch (IOException e) {
             throw new IllegalArgumentException();
