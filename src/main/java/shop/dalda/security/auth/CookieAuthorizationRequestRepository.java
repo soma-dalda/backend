@@ -1,7 +1,6 @@
 package shop.dalda.security.auth;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,6 @@ import shop.dalda.util.CookieUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Profile("prod")
 @Component
 public class CookieAuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 

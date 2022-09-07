@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Profile("prod")
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
@@ -51,7 +49,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                 .setSubject(Long.toString(user.getId()))
-                .claim("role",role)
+                .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .compact();
@@ -66,17 +64,17 @@ public class TokenProvider {
         //토큰 빌드
         String refreshToken =
                 Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .compact();
+                        .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
+                        .setIssuedAt(now)
+                        .setExpiration(expiryDate)
+                        .compact();
 
         // Redis 저장소에 refreshToken 저장
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         redisService.setValues(Long.toString(user.getId()), refreshToken, Duration.ofDays(1));
 
         // ResponseCookie 생성
-        ResponseCookie cookie = ResponseCookie.from("refresh", refreshToken)
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
@@ -85,7 +83,7 @@ public class TokenProvider {
                 .build();
 
         //응답헤더에 쿠키 add
-        response.addHeader("SET-COOKIE",cookie.toString());
+        response.addHeader("SET-COOKIE", cookie.toString());
     }
 
     //AccessToken 을 검사하고 Authentication 객체 생성
@@ -96,8 +94,8 @@ public class TokenProvider {
         Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("role").toString().split(","))
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-        CustomOAuth2User principal = new CustomOAuth2User(Long.valueOf(claims.getSubject()),"","",authorities);
-        return new UsernamePasswordAuthenticationToken(principal,"",authorities);
+        CustomOAuth2User principal = new CustomOAuth2User(Long.valueOf(claims.getSubject()), "", "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
     // AccessToken 만료 시, 갱신때 사용할 정보를 얻기 위해 Claim 리턴

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -14,7 +12,6 @@ import shop.dalda.exception.BadRequestException;
 import shop.dalda.security.jwt.TokenProvider;
 import shop.dalda.util.CookieUtil;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +22,6 @@ import java.util.Optional;
 
 import static shop.dalda.security.auth.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-@Profile("prod")
 @RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -39,7 +35,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String targetUri = determineTargetUrl(request, response, authentication);
-        log.info("targetUri : "+targetUri);
+        log.info("targetUri : " + targetUri);
         if (response.isCommitted()) {
             log.debug("Response has already been committed");
             return;
@@ -52,11 +48,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         // 요청 쿠키에서 redirectUri 추출
-        Optional<String> redirectUri = CookieUtil.getCookie(request,REDIRECT_URI_PARAM_COOKIE_NAME)
+        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
         // 설정된 redirectUri와 현재 요청 uri와 비교
-        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("일치하지 않는 redirectUri 입니다.");
         }
         String targetUri = redirectUri.orElse(getDefaultTargetUrl());
@@ -68,7 +64,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         //Access Token 은 body에 담아서 보냄 (클라이언트 로컬 저장소 활용)
         return UriComponentsBuilder.fromUriString(targetUri)
-                .queryParam("accessToken",accessToken)
+                .queryParam("accessToken", accessToken)
                 .build().toUriString();
     }
 
@@ -76,7 +72,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         super.clearAuthenticationAttributes(request);
 
         // URI 검증을 마쳤으므로 authorizationRequestRepository 에서 쿠키정보 삭제
-        authorizationRequestRepository.removeAuthorizationRequestCookies(request,response);
+        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {

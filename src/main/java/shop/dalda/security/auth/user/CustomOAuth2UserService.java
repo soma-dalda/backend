@@ -3,7 +3,6 @@ package shop.dalda.security.auth.user;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -39,7 +38,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration().getRegistrationId();
 
         //create User entity
-        OAuthAttributes attribute = OAuthAttributes.of(provider,userNameAttributeName,attributes);
+        OAuthAttributes attribute = OAuthAttributes.of(provider, userNameAttributeName, attributes);
         User user = attribute.toEntity();
 
         //check oldUser
@@ -47,12 +46,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //saveOrUpdate create CustomOAuth2User
         CustomOAuth2User oAuth2User;
-        if(oldUser.isPresent()) {
+        if (oldUser.isPresent()) {
             userService.saveOrUpdate(oldUser.get());
             log.info("update oldUser");
             oAuth2User = CustomOAuth2User.create(oldUser.get());
-        }
-        else {
+        } else {
             userService.saveOrUpdate(user);
             log.info("save newUser");
             oAuth2User = CustomOAuth2User.create(user);

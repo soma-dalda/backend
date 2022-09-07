@@ -2,7 +2,6 @@ package shop.dalda.security.auth.user;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.context.annotation.Profile;
 import shop.dalda.user.domain.User;
 
 import java.util.Map;
@@ -20,9 +19,12 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes of(String provider, String userNameAttributeName, Map<String, Object> attributes) {
-        if (provider.equals("google")) return ofGoogle(attributes, createAuthId(attributes, provider, userNameAttributeName));
-        else if (provider.equals("kakao")) return ofKakao(attributes, createAuthId(attributes, provider, userNameAttributeName));
-        else if (provider.equals("naver"))  return ofNaver(attributes, createAuthId(attributes, provider, userNameAttributeName));
+        if (provider.equals("google"))
+            return ofGoogle(attributes, createAuthId(attributes, provider, userNameAttributeName));
+        else if (provider.equals("kakao"))
+            return ofKakao(attributes, createAuthId(attributes, provider, userNameAttributeName));
+        else if (provider.equals("naver"))
+            return ofNaver(attributes, createAuthId(attributes, provider, userNameAttributeName));
         else throw new IllegalArgumentException("유효하지 않은 provider 타입 입니다.");
     }
 
@@ -60,8 +62,7 @@ public class OAuthAttributes {
         if (provider.equals("naver")) {
             Map<String, Object> tmpResponse = (Map<String, Object>) attributes.get("response");
             return provider + "_" + tmpResponse.get("id");
-        }
-        else return provider + "_" + attributes.get(userNameAttributeName);
+        } else return provider + "_" + attributes.get(userNameAttributeName);
     }
 
     public User toEntity() {

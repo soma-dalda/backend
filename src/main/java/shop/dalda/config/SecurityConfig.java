@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import shop.dalda.security.auth.CookieAuthorizationRequestRepository;
 import shop.dalda.security.auth.OAuth2AuthenticationFailureHandler;
 import shop.dalda.security.auth.OAuth2AuthenticationSuccessHandler;
@@ -20,7 +19,6 @@ import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
 import shop.dalda.security.jwt.JwtAuthenticationFilter;
 
 
-@Profile("prod")
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
