@@ -3,23 +3,23 @@ package shop.dalda.template;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import shop.dalda.user.domain.BaseTimeEntity;
 import shop.dalda.user.domain.User;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "templates")
-public class Template {
+public class Template extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private User user;
 
@@ -29,11 +29,6 @@ public class Template {
     @Column(columnDefinition = "json")
     private String content;
 
-    @Column
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     public Long getId() {
         return id;
@@ -51,14 +46,6 @@ public class Template {
         return content;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getModifiedAt() {
-        return modifiedAt;
-    }
-
     public void updateTitle(String title) {
         this.title = title;
     }
@@ -73,7 +60,6 @@ public class Template {
                 "id=" + id +
                 ", user=" + user +
                 ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
                 '}';
     }
 }
