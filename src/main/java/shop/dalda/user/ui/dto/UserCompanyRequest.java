@@ -38,7 +38,9 @@ public class UserCompanyRequest {
     String qnaLink;
     @Schema(description = "인스타 링크", defaultValue = "인스타 링크")
     String instaLink;
-    @Schema(description = "기타 링크", defaultValue = "[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]")
+    @Schema(description = "기타 링크", defaultValue = "[{\"title\":\"title1\",\"url\":\"url1\"}," +
+            "{\"title\":\"title2\",\"url\":\"url2\"}," +
+            "{\"title\":\"title3\",\"url\":\"url3\"}]")
     String etcLinks;
 
     public List<CompanyLink> parsedEtcLinks() throws JsonProcessingException {

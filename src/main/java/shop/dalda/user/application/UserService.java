@@ -33,7 +33,6 @@ public class UserService {
 
     @Transactional
     public void saveOrUpdateCompany(CustomOAuth2User user, UserCompanyRequest requestDto) throws Exception {
-        System.out.println("서비스 : " + user.getId());
         User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new Exception("존재하지않는 유저입니다"));
         findUser.setCompany(requestDto);
         userRepository.save(findUser);

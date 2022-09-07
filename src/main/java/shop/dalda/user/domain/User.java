@@ -63,7 +63,7 @@ public class User extends BaseTimeEntity{
 
     private String instaLink;
 
-    @Convert(converter = StringListConverter.class)
+    @Convert(converter = CompanyLinkConverter.class)
     @Column(columnDefinition = "json")
     private List<CompanyLink> etcLinks;
 
