@@ -20,22 +20,22 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private User company;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consumer_id")
     private User consumer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_id")
     private Template template;
 
     @Column(name = "img_url")
     private String image;
 
-    @Column(name = "template_response", columnDefinition = "json")
+    @Column(name = "template_response")
     private String templateResponseList;
 
     @Column(name = "order_date")
