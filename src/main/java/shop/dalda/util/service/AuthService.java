@@ -21,7 +21,7 @@ public class AuthService {
 
     public String refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
         // 리프레시 토큰 검증
-        String oldRefreshToken = CookieUtil.getCookie(request, "refresh")
+        String oldRefreshToken = CookieUtil.getCookie(request, "refreshToken")
                 .map(Cookie::getValue).orElseThrow(() -> new RuntimeException("리프레시 토큰이 존재하지 않습니다.."));
 
         if (!tokenProvider.validateToken(oldRefreshToken)) {

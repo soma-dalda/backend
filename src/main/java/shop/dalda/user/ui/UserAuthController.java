@@ -23,7 +23,7 @@ public class UserAuthController {
     @Operation(summary = "토큰 재발급", description = "토큰을 재발급 하는 메서드")
     @PostMapping("/refresh")
     public ResponseEntity<String> refresh(HttpServletRequest request, HttpServletResponse response) {
-        String newAccessToken = authService.refreshToken(request, response, request.getHeader("accessToken"));
+        String newAccessToken = authService.refreshToken(request, response, request.getHeader("Authorization"));
         return ResponseEntity.ok().body(newAccessToken);
     }
 }
