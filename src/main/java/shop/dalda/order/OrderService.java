@@ -2,6 +2,7 @@ package shop.dalda.order;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.UserNotFoundException;
@@ -18,7 +19,6 @@ import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,13 +44,21 @@ public class OrderService {
         Integer[] datetime = orderRequestDto.getPickupDate();
         LocalDateTime pickupDateTime = LocalDateTime.of(datetime[0], datetime[1], datetime[2], datetime[3], datetime[4], datetime[5]);
 
+        // 응답 리스트 문자열로 변환
+        StringBuilder responseList = new StringBuilder();
+        for (String response : orderRequestDto.getTemplateResponseList()) {
+            responseList.append(response);
+            responseList.append("/");
+        }
+        responseList.deleteCharAt(responseList.length() - 1);
+
         // Order 객체 생성
         Order order = Order.builder()
                 .company(company)
                 .consumer(consumer)
                 .template(template)
                 .image(orderRequestDto.getImage())
-                .templateResponseList(orderRequestDto.getTemplateResponseList())
+                .templateResponseList(String.valueOf(responseList))
                 .orderDate(LocalDateTime.now())
                 .pickupDate(pickupDateTime)
                 .pickupNoticePhone(orderRequestDto.getPickupNoticePhone())
@@ -68,13 +76,15 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(OrderNotFoundException::new);
 
+        String[] responseList = order.getTemplateResponseList().split("/");
+
         return OrderResponseDto.builder()
                 .id(order.getId())
                 .companyId(order.getCompany().getId())
                 .consumerId(order.getConsumer().getId())
                 .templateId(order.getTemplate().getId())
                 .image(order.getImage())
-                .templateResponseList(order.getTemplateResponseList())
+                .templateResponseList(responseList)
                 .orderDate(order.getOrderDate())
                 .pickupDate(order.getPickupDate())
                 .pickupNoticePhone(order.getPickupNoticePhone())
@@ -88,7 +98,7 @@ public class OrderService {
 
         List<Order> orderList = orderRepository.findAllByCompany(company);
 
-        List<JSONObject> OrderListForResponse = new ArrayList<>();
+        JSONArray OrderListForResponse = new JSONArray();
         for (Order order : orderList) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", order.getId());
@@ -109,7 +119,7 @@ public class OrderService {
 
         List<Order> orderList = orderRepository.findAllByConsumer(consumer);
 
-        List<JSONObject> OrderListForResponse = new ArrayList<>();
+        JSONArray OrderListForResponse = new JSONArray();
         for (Order order : orderList) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", order.getId());
