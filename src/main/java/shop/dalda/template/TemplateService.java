@@ -48,8 +48,6 @@ public class TemplateService {
                 .user(user)
                 .title(templateRequestDto.getTitle())
                 .content(templateRequestDto.getContent())
-                .createdAt(LocalDateTime.now())
-                .modifiedAt(LocalDateTime.now())
                 .build();
 
         // DB 저장
@@ -58,11 +56,6 @@ public class TemplateService {
         return template.getId();
     }
 
-    /**
-     * @param content
-     * @return Boolean
-     * @throws ParseException
-     */
     private Boolean isTemplateValid(String content) throws ParseException {
         JSONArray jsonArray = convertStringToJsonArray(content);
 
@@ -94,13 +87,11 @@ public class TemplateService {
                 .userId(template.getUser().getId())
                 .title(template.getTitle())
                 .content(convertStringToJsonArray(template.getContent()))
-                .createdAt(template.getCreatedAt())
                 .build();
     }
 
-    public TemplateListResponseDto selectTemplateList(Long userId) throws ParseException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+    public TemplateListResponseDto selectTemplateList(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         List<Template> templateList = templateRepository.findAllByUser(user);
 
@@ -138,9 +129,7 @@ public class TemplateService {
         template.updateTitle(templateUpdateRequestDto.getTitle());
         template.updateContent(templateUpdateRequestDto.getContent());
 
-        return TemplateUpdateResponseDto.builder()
-                .id(template.getId())
-                .userId(template.getUser().getId())
+        return TemplateUpdateResponseDto.builder().id(template.getId()).userId(template.getUser().getId()).title(template.getTitle())
                 .content(convertStringToJsonArray(template.getContent()))
                 .build();
     }
