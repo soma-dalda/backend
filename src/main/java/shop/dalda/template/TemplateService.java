@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.template.TemplateNotBelongToUserException;
 import shop.dalda.exception.template.TemplateNotFoundException;
+import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.template.dto.request.TemplateRequestDto;
 import shop.dalda.template.dto.response.TemplateListResponseDto;
 import shop.dalda.template.dto.response.TemplateResponseDto;
@@ -20,7 +21,6 @@ import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +33,10 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
 
-    public Long insertTemplate(TemplateRequestDto templateRequestDto) throws ParseException {
+    public Long insertTemplate(TemplateRequestDto templateRequestDto,
+                               CustomOAuth2User authUser) throws ParseException {
         // User 객체 생성
-        User user = userRepository.findById(templateRequestDto.getCompanyId())
+        User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         // Template 유효성 검사
@@ -109,11 +110,11 @@ public class TemplateService {
                 .build();
     }
 
-    public TemplateUpdateResponseDto updateTemplate(Long userId,
-                                                    Long templateId,
-                                                    TemplateUpdateRequestDto templateUpdateRequestDto) throws ParseException {
+    public TemplateUpdateResponseDto updateTemplate(Long templateId,
+                                                    TemplateUpdateRequestDto templateUpdateRequestDto,
+                                                    CustomOAuth2User authUser) throws ParseException {
         //User 객체 생성
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         // Template 조회
