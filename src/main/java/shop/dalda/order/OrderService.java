@@ -12,6 +12,7 @@ import shop.dalda.order.dto.request.OrderRequestDto;
 import shop.dalda.order.dto.response.OrderListForCompanyResponseDto;
 import shop.dalda.order.dto.response.OrderListForConsumerResponseDto;
 import shop.dalda.order.dto.response.OrderResponseDto;
+import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.template.Template;
 import shop.dalda.template.TemplateRepository;
 import shop.dalda.user.domain.User;
@@ -31,11 +32,12 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    public Long order(OrderRequestDto orderRequestDto) {
+    public Long order(OrderRequestDto orderRequestDto,
+                      CustomOAuth2User authUser) {
         // User, Template 객체 생성
         User company = userRepository.findById(orderRequestDto.getCompanyId())
                 .orElseThrow(UserNotFoundException::new);
-        User consumer = userRepository.findById(orderRequestDto.getCompanyId())
+        User consumer = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
         Template template = templateRepository.findById(orderRequestDto.getTemplateId())
                 .orElseThrow(TemplateNotFoundException::new);
@@ -92,8 +94,8 @@ public class OrderService {
                 .build();
     }
 
-    public OrderListForCompanyResponseDto selectOrderListForCompany(Long companyId) {
-        User company = userRepository.findById(companyId)
+    public OrderListForCompanyResponseDto selectOrderListForCompany(CustomOAuth2User authUser) {
+        User company = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         List<Order> orderList = orderRepository.findAllByCompany(company);
@@ -108,13 +110,12 @@ public class OrderService {
         }
 
         return OrderListForCompanyResponseDto.builder()
-                .userId(companyId)
                 .orderList(OrderListForResponse)
                 .build();
     }
 
-    public OrderListForConsumerResponseDto selectOrderListForConsumer(Long consumerId) {
-        User consumer = userRepository.findById(consumerId)
+    public OrderListForConsumerResponseDto selectOrderListForConsumer(CustomOAuth2User authUser) {
+        User consumer = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         List<Order> orderList = orderRepository.findAllByConsumer(consumer);
@@ -130,7 +131,6 @@ public class OrderService {
         }
 
         return OrderListForConsumerResponseDto.builder()
-                .userId(consumerId)
                 .orderList(OrderListForResponse)
                 .build();
     }

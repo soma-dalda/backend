@@ -3,6 +3,7 @@ package shop.dalda.order.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.json.simple.JSONArray;
 
@@ -10,8 +11,8 @@ import org.json.simple.JSONArray;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderListForConsumerResponseDto {
-    @Schema(description = "목록을 조회한 구매자의 id", defaultValue = "1")
-    private Long userId;
+
+    @Getter
     @Schema(description = "해당 업체가 진행 중인 주문의 목록(주문 id, 업체 id, 업체 이름, 주문 진행 상태 주문 상태 변경 시각)", example = "[\n" +
             "        {\n" +
             "            \"id\": 1,\n" +
@@ -29,13 +30,4 @@ public class OrderListForConsumerResponseDto {
             "        }\n" +
             "    ]")
     private JSONArray orderList;
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public JSONArray getOrderList() {
-        return orderList;
-    }
-
 }
