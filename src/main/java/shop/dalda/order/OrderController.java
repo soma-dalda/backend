@@ -5,11 +5,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.order.dto.request.OrderRequestDto;
 import shop.dalda.order.dto.response.OrderListForCompanyResponseDto;
 import shop.dalda.order.dto.response.OrderListForConsumerResponseDto;
 import shop.dalda.order.dto.response.OrderResponseDto;
+import shop.dalda.security.auth.user.CustomOAuth2User;
 
 import java.net.URI;
 
@@ -26,8 +28,9 @@ public class OrderController {
     // 주문 등록
     @Operation(summary = "주문 등록", description = "구매자가 템플릿에 대한 답변을 작성 후 제출 시 주문을 등록하는 메서드")
     @PostMapping("")
-    public ResponseEntity<Void> order(@RequestBody OrderRequestDto orderRequestDto) {
-        Long orderId = orderService.order(orderRequestDto);
+    public ResponseEntity<Void> order(@RequestBody OrderRequestDto orderRequestDto,
+                                      @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
+        Long orderId = orderService.order(orderRequestDto, authUser);
         String redirectUrl = String.format(REDIRECT_URL, orderId);
         return ResponseEntity.created(URI.create(redirectUrl)).build();
     }
@@ -42,17 +45,17 @@ public class OrderController {
 
     // 주문 목록 조회 - 판매자
     @Operation(summary = "주문 목록 조회 - 판매자", description = "업체 측에서 현재 자신이 진행 중인 주문의 목록을 조회하는 메서드")
-    @GetMapping("/list/company/{user_id}")
-    public ResponseEntity<OrderListForCompanyResponseDto> selectOrderListForCompany(@PathVariable(name = "user_id") Long companyId) {
-        OrderListForCompanyResponseDto orderListForCompanyResponseDto = orderService.selectOrderListForCompany(companyId);
+    @GetMapping("/list/company")
+    public ResponseEntity<OrderListForCompanyResponseDto> selectOrderListForCompany(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
+        OrderListForCompanyResponseDto orderListForCompanyResponseDto = orderService.selectOrderListForCompany(authUser);
         return ResponseEntity.ok(orderListForCompanyResponseDto);
     }
 
     // 주문 목록 조회 - 구매자
     @Operation(summary = "주문 목록 조회 - 구매자", description = "구매자가 현재 자신이 진행 중인 주문의 목록을 조회하는 메서드")
     @GetMapping("/list/consumer/{user_id}")
-    public ResponseEntity<OrderListForConsumerResponseDto> selectOrderListForConsumer(@PathVariable(name = "user_id") Long consumerId) {
-        OrderListForConsumerResponseDto OrderListForConsumerResponseDto = orderService.selectOrderListForConsumer(consumerId);
+    public ResponseEntity<OrderListForConsumerResponseDto> selectOrderListForConsumer(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
+        OrderListForConsumerResponseDto OrderListForConsumerResponseDto = orderService.selectOrderListForConsumer(authUser);
         return ResponseEntity.ok(OrderListForConsumerResponseDto);
     }
 
