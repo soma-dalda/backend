@@ -46,11 +46,12 @@ public class OrderService {
         Integer[] datetime = orderRequestDto.getPickupDate();
         LocalDateTime pickupDateTime = LocalDateTime.of(datetime[0], datetime[1], datetime[2], datetime[3], datetime[4], datetime[5]);
 
-        // 응답 리스트 문자열로 변환
-        StringBuilder responseList = new StringBuilder();
-        for (String response : orderRequestDto.getTemplateResponseList()) {
-            responseList.append(response);
-            responseList.append("/");
+        // 답변 중복 검사
+        List<Answer> answers = answerConverter.convertToEntityAttribute(orderRequestDto.getTemplateResponses());
+        for (Answer answer : answers) {
+            answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
+            String[] checkedAnswer = answer.getAnswer().split("', '");
+            answer.setAnswer(Arrays.toString(Arrays.stream(checkedAnswer).distinct().toArray(String[]::new)));
         }
         responseList.deleteCharAt(responseList.length() - 1);
 
@@ -60,7 +61,7 @@ public class OrderService {
                 .consumer(consumer)
                 .template(template)
                 .image(orderRequestDto.getImage())
-                .templateResponseList(String.valueOf(responseList))
+                .templateResponses(answers)
                 .orderDate(LocalDateTime.now())
                 .pickupDate(pickupDateTime)
                 .pickupNoticePhone(orderRequestDto.getPickupNoticePhone())
