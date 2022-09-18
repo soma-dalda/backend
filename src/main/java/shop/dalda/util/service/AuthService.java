@@ -1,7 +1,6 @@
 package shop.dalda.util.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import shop.dalda.security.auth.user.CustomOAuth2User;
@@ -42,9 +41,10 @@ public class AuthService {
         }
 
         // 토큰 재발급
-        String newAccessToken = tokenProvider.createAccessToken(authentication);
-        tokenProvider.createRefreshToken(authentication, response);
+        //String newAccessToken = tokenProvider.createTokens(authentication, response);
+        tokenProvider.createTokens(authentication, response);
 
-        return newAccessToken;
+        //return newAccessToken;
+        return "";
     }
 }

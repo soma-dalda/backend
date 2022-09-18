@@ -15,17 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * 모든 Request에서 JWT 토큰을 검사하는 필터
- * Http Request Header에 Authorization : Bearer <JWT> 형태로 전송된 AccessToken을 검사하고,
- * 유효한다면 Authentication 객체를 SecurityContext에 저장한다.
- */
+
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private TokenProvider tokenProvider;
+    private final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private final TokenProvider tokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
