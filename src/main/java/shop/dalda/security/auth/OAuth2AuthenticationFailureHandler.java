@@ -19,7 +19,7 @@ import static shop.dalda.security.auth.CookieAuthorizationRequestRepository.REDI
 @Component
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private CookieAuthorizationRequestRepository authorizationRequestRepository;
+    private final CookieAuthorizationRequestRepository authorizationRequestRepository;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {

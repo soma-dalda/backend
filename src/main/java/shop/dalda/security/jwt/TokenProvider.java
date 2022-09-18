@@ -34,56 +34,59 @@ public class TokenProvider {
     @Value("${app.auth.tokenSecret}")
     private String TOKEN_SECRET;
 
-    public String createAccessToken(Authentication authentication) {
+    public void createTokens(Authentication authentication, HttpServletResponse response) {
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
-
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + TOKEN_EXPIRATION); // 30분
-
         // 유저 권한
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        //토큰 빌드
-        return Jwts.builder()
+        Date now = new Date();
+        Date AccessExpiration = new Date(now.getTime() + TOKEN_EXPIRATION); // 30분
+        Date refreshExpiration = new Date(now.getTime() + TOKEN_EXPIRATION * 48); // 1일
+
+        //build accessToken
+        String accessToken =
+                Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                 .setSubject(Long.toString(user.getId()))
                 .claim("role", role)
                 .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setExpiration(AccessExpiration)
                 .compact();
-    }
 
-    public void createRefreshToken(Authentication authentication, HttpServletResponse response) {
-
-        Date now = new Date();
-        long refreshExpiration = TOKEN_EXPIRATION * 24;
-        Date expiryDate = new Date(now.getTime() + refreshExpiration); // 1일
-
-        //토큰 빌드
+        //build refreshToken
         String refreshToken =
                 Jwts.builder()
                         .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
                         .setIssuedAt(now)
-                        .setExpiration(expiryDate)
+                        .setExpiration(refreshExpiration)
                         .compact();
 
         // Redis 저장소에 refreshToken 저장
-        CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         redisService.setValues(Long.toString(user.getId()), refreshToken, Duration.ofDays(1));
 
-        // ResponseCookie 생성
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+        // accessToken cookie
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .maxAge(refreshExpiration)
+                .maxAge(TOKEN_EXPIRATION / 1000)
+                .path("/")
+                .build();
+
+        // refreshToken cookie
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Lax")
+                .maxAge((TOKEN_EXPIRATION * 48) / 1000)
                 .path("/")
                 .build();
 
         //응답헤더에 쿠키 add
-        response.addHeader("SET-COOKIE", cookie.toString());
+        response.addHeader("SET-COOKIE", accessCookie.toString());
+        response.addHeader("SET-COOKIE", refreshCookie.toString());
     }
 
     //AccessToken 을 검사하고 Authentication 객체 생성
