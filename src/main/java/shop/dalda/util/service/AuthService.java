@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class AuthService {
 
-    private RedisService redisService;
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
+    private final RedisService redisService;
 
-    public String refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
         // 리프레시 토큰 검증
         String oldRefreshToken = CookieUtil.getCookie(request, "refreshToken")
                 .map(Cookie::getValue).orElseThrow(() -> new RuntimeException("리프레시 토큰이 존재하지 않습니다.."));
@@ -41,10 +41,6 @@ public class AuthService {
         }
 
         // 토큰 재발급
-        //String newAccessToken = tokenProvider.createTokens(authentication, response);
         tokenProvider.createTokens(authentication, response);
-
-        //return newAccessToken;
-        return "";
     }
 }
