@@ -33,7 +33,7 @@ public class UserCompanyRequest {
     @Schema(description = "업체 연락처", defaultValue = "020000000")
     String companyPhone;
     @Schema(description = "업체 프로필 사진", defaultValue = "imageUrl")
-    String profile;
+    String profileImage;
     @Schema(description = "문의 링크", defaultValue = "문의 링크")
     String qnaLink;
     @Schema(description = "인스타 링크", defaultValue = "인스타 링크")
