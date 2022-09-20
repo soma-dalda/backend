@@ -30,7 +30,7 @@ public class OrderController {
     @PostMapping("")
     public ResponseEntity<Void> order(@RequestBody OrderRequestDto orderRequestDto,
                                       @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
-        Long orderId = orderService.order(orderRequestDto, authUser);
+        Long orderId = orderService.requestOrder(orderRequestDto, authUser);
         String redirectUrl = String.format(REDIRECT_URL, orderId);
         return ResponseEntity.created(URI.create(redirectUrl)).build();
     }

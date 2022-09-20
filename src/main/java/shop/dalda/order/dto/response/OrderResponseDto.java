@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.dalda.order.Answer;
 import shop.dalda.order.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -36,7 +38,7 @@ public class OrderResponseDto {
 
     @Getter
     @Schema(description = "구매자의 답변의 리스트 형태의 문자열", example = "[\"[\"abcd\"]\", \"1234\"]")
-    private String[] templateResponseList;
+    private List<Answer> templateResponses;
 
     @Getter
     @Schema(description = "주문 제출 일시", example = "2022-09-08T00:25:00")

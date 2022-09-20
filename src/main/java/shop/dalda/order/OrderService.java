@@ -20,6 +20,7 @@ import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,8 +33,10 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    public Long order(OrderRequestDto orderRequestDto,
-                      CustomOAuth2User authUser) {
+    private final JSONConverter JSONConverter = new JSONConverter();
+
+    public Long requestOrder(OrderRequestDto orderRequestDto,
+                             CustomOAuth2User authUser) {
         // User, Template 객체 생성
         User company = userRepository.findById(orderRequestDto.getCompanyId())
                 .orElseThrow(UserNotFoundException::new);
@@ -43,16 +46,15 @@ public class OrderService {
                 .orElseThrow(TemplateNotFoundException::new);
 
         // 픽업 시간 객체 생성
-        Integer[] datetime = orderRequestDto.getPickupDate();
-        LocalDateTime pickupDateTime = LocalDateTime.of(datetime[0], datetime[1], datetime[2], datetime[3], datetime[4], datetime[5]);
+        LocalDateTime pickupDateTime = LocalDateTime.parse(orderRequestDto.getPickupDate());
 
-        // 응답 리스트 문자열로 변환
-        StringBuilder responseList = new StringBuilder();
-        for (String response : orderRequestDto.getTemplateResponseList()) {
-            responseList.append(response);
-            responseList.append("/");
+        // 답변 중복 검사
+        List<Answer> answers = (List<Answer>) (JSONConverter.convertToEntityAttribute(orderRequestDto.getTemplateResponses()));
+        for (Answer answer : answers) {
+            answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
+            String[] checkedAnswer = answer.getAnswer().split("', '");
+            answer.setAnswer(Arrays.toString(Arrays.stream(checkedAnswer).distinct().toArray(String[]::new)));
         }
-        responseList.deleteCharAt(responseList.length() - 1);
 
         // Order 객체 생성
         Order order = Order.builder()
@@ -60,7 +62,7 @@ public class OrderService {
                 .consumer(consumer)
                 .template(template)
                 .image(orderRequestDto.getImage())
-                .templateResponseList(String.valueOf(responseList))
+                .templateResponses(answers)
                 .orderDate(LocalDateTime.now())
                 .pickupDate(pickupDateTime)
                 .pickupNoticePhone(orderRequestDto.getPickupNoticePhone())
@@ -78,15 +80,13 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(OrderNotFoundException::new);
 
-        String[] responseList = order.getTemplateResponseList().split("/");
-
         return OrderResponseDto.builder()
                 .id(order.getId())
                 .companyId(order.getCompany().getId())
                 .consumerId(order.getConsumer().getId())
                 .templateId(order.getTemplate().getId())
                 .image(order.getImage())
-                .templateResponseList(responseList)
+                .templateResponses(order.getTemplateResponses())
                 .orderDate(order.getOrderDate())
                 .pickupDate(order.getPickupDate())
                 .pickupNoticePhone(order.getPickupNoticePhone())

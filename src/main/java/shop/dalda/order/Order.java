@@ -2,17 +2,20 @@ package shop.dalda.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.dalda.template.Template;
 import shop.dalda.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
 @Table(name = "orders")
 public class Order {
 
@@ -35,8 +38,9 @@ public class Order {
     @Column(name = "img_url")
     private String image;
 
-    @Column(name = "template_response")
-    private String templateResponseList;
+    @Convert(converter = JSONConverter.class)
+    @Column(columnDefinition = "json")
+    private List<Answer> templateResponses;
 
     @Column(name = "order_date")
     private LocalDateTime orderDate;
@@ -52,48 +56,4 @@ public class Order {
 
     @Column(name = "status_change_date")
     private LocalDateTime statusChangeDate;
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getCompany() {
-        return company;
-    }
-
-    public User getConsumer() {
-        return consumer;
-    }
-
-    public Template getTemplate() {
-        return template;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getTemplateResponseList() {
-        return templateResponseList;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public LocalDateTime getPickupDate() {
-        return pickupDate;
-    }
-
-    public String getPickupNoticePhone() {
-        return pickupNoticePhone;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public LocalDateTime getStatusChangeDate() {
-        return statusChangeDate;
-    }
 }

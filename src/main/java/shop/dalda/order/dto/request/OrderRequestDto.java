@@ -18,12 +18,12 @@ public class OrderRequestDto {
     private String image;
 
     @Getter
-    @Schema(description = "템플릿에 대한 구매자의 답변의 리스트 형태의 문자열", defaultValue = "[\"[\"abcd\"]\", \"1234\"]")
-    private String[] templateResponseList;
+    @Schema(description = "템플릿에 대한 구매자의 답변의 리스트 형태의 문자열", defaultValue = "[{\"question\": \"test\", \"answer\": \"['1', '2']\"}]")
+    private String templateResponses;
 
     @Getter
     @Schema(description = "구매자가 설정한 픽업 일시를 정수형태로 가지는 정수형 배열", defaultValue = "[2022, 9, 7, 12, 00, 00]")
-    private Integer[] pickupDate;
+    private String pickupDate;
 
     @Getter
     @Schema(description = "픽업 알림을 받을 연락처(전화번호) 11자리", defaultValue = "01012341111")
