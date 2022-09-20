@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Converter
-public class AnswerConverter implements AttributeConverter<List<?>, String> {
+public class JSONConverter implements AttributeConverter<List<?>, String> {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -26,7 +26,7 @@ public class AnswerConverter implements AttributeConverter<List<?>, String> {
 
     //JSON to List
     @Override
-    public List<Answer> convertToEntityAttribute(String dbData) {
+    public List<?> convertToEntityAttribute(String dbData) {
         try {
             return mapper.readValue(dbData, new TypeReference<>() {
             });

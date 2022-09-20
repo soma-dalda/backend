@@ -33,7 +33,7 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    private final AnswerConverter answerConverter = new AnswerConverter();
+    private final JSONConverter JSONConverter = new JSONConverter();
 
     public Long requestOrder(OrderRequestDto orderRequestDto,
                              CustomOAuth2User authUser) {
@@ -49,7 +49,7 @@ public class OrderService {
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderRequestDto.getPickupDate());
 
         // 답변 중복 검사
-        List<Answer> answers = answerConverter.convertToEntityAttribute(orderRequestDto.getTemplateResponses());
+        List<Answer> answers = (List<Answer>) (JSONConverter.convertToEntityAttribute(orderRequestDto.getTemplateResponses()));
         for (Answer answer : answers) {
             answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
             String[] checkedAnswer = answer.getAnswer().split("', '");

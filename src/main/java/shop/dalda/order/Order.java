@@ -42,7 +42,7 @@ public class Order {
     @Getter
     private String image;
 
-    @Convert(converter = AnswerConverter.class)
+    @Convert(converter = JSONConverter.class)
     @Column(columnDefinition = "json")
     @Getter
     private List<Answer> templateResponses;
