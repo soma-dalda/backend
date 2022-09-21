@@ -22,7 +22,7 @@ public class OrderRequestDto {
     private String templateResponses;
 
     @Getter
-    @Schema(description = "구매자가 설정한 픽업 일시를 정수형태로 가지는 정수형 배열", defaultValue = "[2022, 9, 7, 12, 00, 00]")
+    @Schema(description = "구매자가 설정한 픽업 일시를 정수형태로 가지는 정수형 배열", defaultValue = "2022-08-25T12:00:00")
     private String pickupDate;
 
     @Getter
