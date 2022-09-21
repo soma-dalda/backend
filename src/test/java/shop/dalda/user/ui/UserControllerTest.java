@@ -1,7 +1,6 @@
 package shop.dalda.user.ui;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,12 +16,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import shop.dalda.auth.WithMockUser;
 import shop.dalda.user.application.UserService;
-import shop.dalda.user.domain.CompanyLink;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.util.service.AuthService;
 
-
-import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,33 +35,6 @@ class UserControllerTest {
     @Autowired private MockMvc mockMvc;
 
     @Test
-    @DisplayName("json 파싱")
-    void test() throws JsonProcessingException {
-        //given
-        UserCompanyRequest request = UserCompanyRequest.builder()
-                .companyName("업체명")
-                .companyDomain("도메인")
-                .companyIntroduction("소개소개")
-                .companyPhone("02-1111-1111")
-                .companyLocation("서울 강남구")
-                .businessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                        "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                        "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]")
-                .profile("url")
-                .qnaLink("qnaLink")
-                .instaLink("instaLink")
-                .etcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]")
-                .build();
-        //when
-        ObjectMapper mapper = new ObjectMapper();
-        List<CompanyLink> result = mapper.readValue(request.getEtcLinks(), new TypeReference<>() {
-        });
-        //then
-        for (CompanyLink c : result) {
-            System.out.println(c.getUrl());
-        }
-    }
-    @Test
     @DisplayName("업체등록")
     @WithMockUser()
     void saveOrUpdate_company() throws Exception {
@@ -79,7 +48,7 @@ class UserControllerTest {
                 .businessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
                         "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
                         "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]")
-                .profile("url")
+                .profileImage("url")
                 .qnaLink("qnaLink")
                 .instaLink("instaLink")
                 .etcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]")
