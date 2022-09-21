@@ -1,4 +1,4 @@
-package shop.dalda.order;
+package shop.dalda.order.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

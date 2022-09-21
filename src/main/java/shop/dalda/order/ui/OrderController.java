@@ -1,4 +1,4 @@
-package shop.dalda.order;
+package shop.dalda.order.ui;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,10 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import shop.dalda.order.dto.request.OrderRequestDto;
-import shop.dalda.order.dto.response.OrderListForCompanyResponseDto;
-import shop.dalda.order.dto.response.OrderListForConsumerResponseDto;
-import shop.dalda.order.dto.response.OrderResponseDto;
+import shop.dalda.order.application.OrderService;
+import shop.dalda.order.ui.dto.request.OrderRequestDto;
+import shop.dalda.order.ui.dto.response.OrderCountResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForConsumerResponseDto;
+import shop.dalda.order.ui.dto.response.OrderResponseDto;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 
 import java.net.URI;
@@ -59,4 +61,10 @@ public class OrderController {
         return ResponseEntity.ok(OrderListForConsumerResponseDto);
     }
 
+    @Operation(summary = "주문 개수 조회", description = "사용자와 관련된 주문의 개수를 조회하는 메서드")
+    @GetMapping("/count")
+    public ResponseEntity<OrderCountResponseDto> countOrder(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
+        OrderCountResponseDto orderCountResponseDto = orderService.countOrder(authUser);
+        return ResponseEntity.ok(orderCountResponseDto);
+    }
 }

@@ -1,4 +1,4 @@
-package shop.dalda.order;
+package shop.dalda.order.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +8,16 @@ import org.springframework.stereotype.Service;
 import shop.dalda.exception.UserNotFoundException;
 import shop.dalda.exception.template.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
-import shop.dalda.order.dto.request.OrderRequestDto;
-import shop.dalda.order.dto.response.OrderListForCompanyResponseDto;
-import shop.dalda.order.dto.response.OrderListForConsumerResponseDto;
-import shop.dalda.order.dto.response.OrderResponseDto;
+import shop.dalda.order.*;
+import shop.dalda.order.domain.Answer;
+import shop.dalda.order.domain.Order;
+import shop.dalda.order.domain.OrderStatus;
+import shop.dalda.order.domain.repository.OrderRepository;
+import shop.dalda.order.ui.dto.request.OrderRequestDto;
+import shop.dalda.order.ui.dto.response.OrderCountResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForConsumerResponseDto;
+import shop.dalda.order.ui.dto.response.OrderResponseDto;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.template.Template;
 import shop.dalda.template.TemplateRepository;
@@ -33,7 +39,7 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    private final JSONConverter JSONConverter = new JSONConverter();
+    private final shop.dalda.order.JSONConverter JSONConverter = new JSONConverter();
 
     public Long requestOrder(OrderRequestDto orderRequestDto,
                              CustomOAuth2User authUser) {
@@ -132,6 +138,17 @@ public class OrderService {
 
         return OrderListForConsumerResponseDto.builder()
                 .orderList(OrderListForResponse)
+                .build();
+    }
+
+    public OrderCountResponseDto countOrder(CustomOAuth2User authUser) {
+        User user = userRepository.findById(authUser.getId())
+                .orElseThrow(UserNotFoundException::new);
+
+        Long orderCount = orderRepository.countOrderByUserId(user);
+
+        return OrderCountResponseDto.builder()
+                .orderCount(orderCount)
                 .build();
     }
 }
