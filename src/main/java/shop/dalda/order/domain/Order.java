@@ -1,9 +1,7 @@
 package shop.dalda.order.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import shop.dalda.order.JSONConverter;
 import shop.dalda.template.Template;
 import shop.dalda.user.domain.User;
 

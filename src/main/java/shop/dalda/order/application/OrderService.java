@@ -39,7 +39,7 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    private final JSONConverter JSONConverter = new JSONConverter();
+    private final shop.dalda.order.JSONConverter JSONConverter = new JSONConverter();
 
     public Long requestOrder(OrderRequestDto orderRequestDto,
                              CustomOAuth2User authUser) {
@@ -138,6 +138,17 @@ public class OrderService {
 
         return OrderListForConsumerResponseDto.builder()
                 .orderList(OrderListForResponse)
+                .build();
+    }
+
+    public OrderCountResponseDto countOrder(CustomOAuth2User authUser) {
+        User user = userRepository.findById(authUser.getId())
+                .orElseThrow(UserNotFoundException::new);
+
+        Long orderCount = orderRepository.countOrderByUserId(user);
+
+        return OrderCountResponseDto.builder()
+                .orderCount(orderCount)
                 .build();
     }
 }

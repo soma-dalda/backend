@@ -61,4 +61,10 @@ public class OrderController {
         return ResponseEntity.ok(OrderListForConsumerResponseDto);
     }
 
+    @Operation(summary = "주문 개수 조회", description = "사용자와 관련된 주문의 개수를 조회하는 메서드")
+    @GetMapping("/count")
+    public ResponseEntity<OrderCountResponseDto> countOrder(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
+        OrderCountResponseDto orderCountResponseDto = orderService.countOrder(authUser);
+        return ResponseEntity.ok(orderCountResponseDto);
+    }
 }
