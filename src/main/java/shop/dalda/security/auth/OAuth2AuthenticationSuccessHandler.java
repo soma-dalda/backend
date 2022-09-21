@@ -12,7 +12,6 @@ import shop.dalda.exception.BadRequestException;
 import shop.dalda.security.jwt.TokenProvider;
 import shop.dalda.util.CookieUtil;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String REDIRECT_URI;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUri = determineTargetUrl(request, response, authentication);
         log.info("targetUri : " + targetUri);
         if (response.isCommitted()) {
@@ -47,10 +46,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        // 요청 쿠키에서 redirectUri 추출
+        // 쿠키에서 redirectUri 추출
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         // 설정된 redirectUri와 현재 요청 uri와 비교
+
         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new BadRequestException("일치하지 않는 redirectUri 입니다.");
         }
