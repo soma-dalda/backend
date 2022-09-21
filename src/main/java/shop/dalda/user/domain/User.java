@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity{
 
     private String companyIntroduction;
 
-    private String profile;
+    private String profileImage;
 
     @Convert(converter = BusinessHourConverter.class)
     @Column(columnDefinition = "json")
@@ -92,7 +92,7 @@ public class User extends BaseTimeEntity{
         this.companyIntroduction = requestDto.getCompanyIntroduction();
         this.businessHours = requestDto.parsedBusinessHours();
         this.companyPhone = requestDto.getCompanyPhone();
-        this.profile = requestDto.getProfile();
+        this.profileImage = requestDto.getProfileImage();
         this.qnaLink = requestDto.getQnaLink();
         this.instaLink = requestDto.getInstaLink();
         this.etcLinks = requestDto.parsedEtcLinks();

@@ -14,19 +14,19 @@ public class UserCompanyResponse {
     String companyPhone;
     String companyIntroduction;
     List<BusinessHour> businessHours;
-    String profile;
+    String profileImage;
     String qnaLink;
     String instaLink;
     List<CompanyLink> etcLinks;
 
     @QueryProjection
-    public UserCompanyResponse(String companyName, String companyLocation, String companyPhone, String companyIntroduction, List<BusinessHour> businessHours, String profile, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {
+    public UserCompanyResponse(String companyName, String companyLocation, String companyPhone, String companyIntroduction, List<BusinessHour> businessHours, String profileImage, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {
         this.companyName = companyName;
         this.companyLocation = companyLocation;
         this.companyPhone = companyPhone;
         this.companyIntroduction = companyIntroduction;
         this.businessHours = businessHours;
-        this.profile = profile;
+        this.profileImage = profileImage;
         this.qnaLink = qnaLink;
         this.instaLink = instaLink;
         this.etcLinks = etcLinks;
