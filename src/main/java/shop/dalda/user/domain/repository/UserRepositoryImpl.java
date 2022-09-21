@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.companyPhone,
                 user.companyIntroduction,
                 user.businessHours,
-                user.profile,
+                user.profileImage,
                 user.qnaLink,
                 user.instaLink,
                 user.etcLinks
