@@ -6,18 +6,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.UserNotFoundException;
+import shop.dalda.exception.order.OrderNotBelongToUserException;
 import shop.dalda.exception.template.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
-import shop.dalda.order.*;
 import shop.dalda.order.domain.Answer;
 import shop.dalda.order.domain.Order;
 import shop.dalda.order.domain.OrderStatus;
 import shop.dalda.order.domain.repository.OrderRepository;
+import shop.dalda.order.ui.dto.request.OrderUpdateRequestDto;
+import shop.dalda.order.ui.dto.response.OrderUpdateResponseDto;
 import shop.dalda.order.ui.dto.request.OrderRequestDto;
 import shop.dalda.order.ui.dto.response.OrderCountResponseDto;
 import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto;
 import shop.dalda.order.ui.dto.response.OrderListForConsumerResponseDto;
 import shop.dalda.order.ui.dto.response.OrderResponseDto;
+import shop.dalda.order.ui.mapper.AnswerConverter;
+import shop.dalda.order.ui.mapper.OrderMapper;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.template.Template;
 import shop.dalda.template.TemplateRepository;
@@ -39,7 +43,7 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    private final shop.dalda.order.JSONConverter JSONConverter = new JSONConverter();
+    private final AnswerConverter AnswerConverter = new AnswerConverter();
 
     public Long requestOrder(OrderRequestDto orderRequestDto,
                              CustomOAuth2User authUser) {
@@ -55,12 +59,7 @@ public class OrderService {
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderRequestDto.getPickupDate());
 
         // 답변 중복 검사
-        List<Answer> answers = (List<Answer>) (JSONConverter.convertToEntityAttribute(orderRequestDto.getTemplateResponses()));
-        for (Answer answer : answers) {
-            answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
-            String[] checkedAnswer = answer.getAnswer().split("', '");
-            answer.setAnswer(Arrays.toString(Arrays.stream(checkedAnswer).distinct().toArray(String[]::new)));
-        }
+        List<Answer> answerList = parseAnswer(orderRequestDto.getTemplateResponses());
 
         // Order 객체 생성
         Order order = Order.builder()
@@ -68,7 +67,7 @@ public class OrderService {
                 .consumer(consumer)
                 .template(template)
                 .image(orderRequestDto.getImage())
-                .templateResponses(answers)
+                .templateResponses(answerList)
                 .orderDate(LocalDateTime.now())
                 .pickupDate(pickupDateTime)
                 .pickupNoticePhone(orderRequestDto.getPickupNoticePhone())
@@ -150,5 +149,44 @@ public class OrderService {
         return OrderCountResponseDto.builder()
                 .orderCount(orderCount)
                 .build();
+    }
+
+    public OrderUpdateResponseDto updateOrder(Long orderId, OrderUpdateRequestDto orderUpdateRequestDto, CustomOAuth2User authUser) {
+        // User, Order 조회
+        User user = userRepository.findById(authUser.getId())
+                .orElseThrow(UserNotFoundException::new);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(OrderNotFoundException::new);
+
+        // User 권한 확인
+        if (!user.equals(order.getCompany()) && !user.equals(order.getConsumer())) {
+            throw new OrderNotBelongToUserException();
+        }
+
+        // 픽업 시간 객체 생성
+        LocalDateTime pickupDateTime = LocalDateTime.parse(orderUpdateRequestDto.getPickupDate());
+
+        // 답변 중복 검사
+        List<Answer> answerList = parseAnswer(orderUpdateRequestDto.getTemplateResponses());
+
+        // Order update
+        order.setImage(orderUpdateRequestDto.getImage());
+        order.setTemplateResponses(answerList);
+        order.setPickupDate(pickupDateTime);
+        order.setPickupNoticePhone(orderUpdateRequestDto.getPickupNoticePhone());
+        order.setOrderStatus(orderUpdateRequestDto.getOrderStatus());
+
+        return OrderMapper.INSTANCE.orderToDto(order);
+    }
+
+    private List<Answer> parseAnswer(String answerString) {
+        List<Answer> answers = (AnswerConverter.convertToEntityAttribute(answerString));
+        for (Answer answer : answers) {
+            answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
+            String[] checkedAnswer = answer.getAnswer().split("', '");
+            answer.setAnswer(Arrays.toString(Arrays.stream(checkedAnswer).distinct().toArray(String[]::new)));
+        }
+
+        return answers;
     }
 }

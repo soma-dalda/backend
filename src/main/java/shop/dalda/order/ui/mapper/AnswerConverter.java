@@ -1,8 +1,9 @@
-package shop.dalda.order;
+package shop.dalda.order.ui.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import shop.dalda.order.domain.Answer;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -10,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Converter
-public class JSONConverter implements AttributeConverter<List<?>, String> {
+public class AnswerConverter implements AttributeConverter<List<?>, String> {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -26,7 +27,7 @@ public class JSONConverter implements AttributeConverter<List<?>, String> {
 
     //JSON to List
     @Override
-    public List<?> convertToEntityAttribute(String dbData) {
+    public List<Answer> convertToEntityAttribute(String dbData) {
         try {
             return mapper.readValue(dbData, new TypeReference<>() {
             });

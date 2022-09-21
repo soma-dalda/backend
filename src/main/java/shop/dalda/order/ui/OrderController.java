@@ -4,10 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.order.application.OrderService;
+import shop.dalda.order.ui.dto.request.OrderUpdateRequestDto;
+import shop.dalda.order.ui.dto.response.OrderUpdateResponseDto;
 import shop.dalda.order.ui.dto.request.OrderRequestDto;
 import shop.dalda.order.ui.dto.response.OrderCountResponseDto;
 import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto;
@@ -66,5 +69,16 @@ public class OrderController {
     public ResponseEntity<OrderCountResponseDto> countOrder(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
         OrderCountResponseDto orderCountResponseDto = orderService.countOrder(authUser);
         return ResponseEntity.ok(orderCountResponseDto);
+    }
+
+    // 템플릿 수정
+    @Operation(summary = "주문 수정", description = "주문을 수정하는 메서드")
+    @PutMapping("/{order_id}")
+    public ResponseEntity<OrderUpdateResponseDto> updateOrder(@Parameter @PathVariable(name = "order_id") Long orderId,
+                                                              @Parameter @RequestBody OrderUpdateRequestDto orderUpdateRequestDto,
+                                                              @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) throws ParseException {
+        OrderUpdateResponseDto orderUpdateResponseDto = orderService.updateOrder(orderId, orderUpdateRequestDto, authUser);
+        URI redirectUrl = URI.create(String.format(REDIRECT_URL, orderId));
+        return ResponseEntity.created(redirectUrl).body(orderUpdateResponseDto);
     }
 }
