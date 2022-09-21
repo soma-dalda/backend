@@ -1,12 +1,13 @@
-package shop.dalda.order.dto.response;
+package shop.dalda.order.ui.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.dalda.order.Answer;
-import shop.dalda.order.OrderStatus;
+import shop.dalda.order.domain.Answer;
+import shop.dalda.order.domain.Order;
+import shop.dalda.order.domain.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

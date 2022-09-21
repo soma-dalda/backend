@@ -1,4 +1,4 @@
-package shop.dalda.order.dto.response;
+package shop.dalda.order.ui.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
