@@ -3,7 +3,7 @@ package shop.dalda.user.domain;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.*;
 import shop.dalda.order.domain.Order;
-import shop.dalda.template.Template;
+import shop.dalda.template.domain.Template;
 import shop.dalda.user.ui.dto.*;
 
 import javax.persistence.*;

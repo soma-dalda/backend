@@ -2,7 +2,7 @@ package shop.dalda.order.domain;
 
 import lombok.*;
 import shop.dalda.order.ui.mapper.AnswerConverter;
-import shop.dalda.template.Template;
+import shop.dalda.template.domain.Template;
 import shop.dalda.user.domain.User;
 
 import javax.persistence.*;

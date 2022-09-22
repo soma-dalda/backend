@@ -1,4 +1,4 @@
-package shop.dalda.template;
+package shop.dalda.template.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

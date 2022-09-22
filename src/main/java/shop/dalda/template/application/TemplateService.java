@@ -1,4 +1,4 @@
-package shop.dalda.template;
+package shop.dalda.template.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,13 +10,15 @@ import org.springframework.stereotype.Service;
 import shop.dalda.exception.template.TemplateNotBelongToUserException;
 import shop.dalda.exception.template.TemplateNotFoundException;
 import shop.dalda.security.auth.user.CustomOAuth2User;
-import shop.dalda.template.dto.request.TemplateRequestDto;
-import shop.dalda.template.dto.response.TemplateListResponseDto;
-import shop.dalda.template.dto.response.TemplateResponseDto;
+import shop.dalda.template.domain.Template;
+import shop.dalda.template.domain.repository.TemplateRepository;
+import shop.dalda.template.ui.dto.request.TemplateRequestDto;
+import shop.dalda.template.ui.dto.response.TemplateListResponseDto;
+import shop.dalda.template.ui.dto.response.TemplateResponseDto;
 import shop.dalda.exception.template.TemplateInvalidException;
 import shop.dalda.exception.UserNotFoundException;
-import shop.dalda.template.dto.request.TemplateUpdateRequestDto;
-import shop.dalda.template.dto.response.TemplateUpdateResponseDto;
+import shop.dalda.template.ui.dto.request.TemplateUpdateRequestDto;
+import shop.dalda.template.ui.dto.response.TemplateUpdateResponseDto;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
 
