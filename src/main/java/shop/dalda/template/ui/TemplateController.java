@@ -48,7 +48,7 @@ public class TemplateController {
 
     // 템플릿 목록 조회
     @Operation(summary = "템플릿 목록 조회", description = "업체가 등록한 모든 템플릿의 목록을 조회하는 메서드")
-    @GetMapping("/{company_id}/list")
+    @GetMapping("/list/{company_id}")
     public ResponseEntity<TemplateListResponseDto> selectTemplateList(@Parameter(description = "조회할 업체의 id") @PathVariable(name = "company_id") Long companyId) {
         TemplateListResponseDto templateListResponseDto = templateService.selectTemplateList(companyId);
         return ResponseEntity.ok(templateListResponseDto);
