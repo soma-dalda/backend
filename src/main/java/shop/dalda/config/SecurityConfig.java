@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import shop.dalda.security.auth.CookieAuthorizationRequestRepository;
+import shop.dalda.security.auth.LogoutSuccessHandler;
 import shop.dalda.security.auth.OAuth2AuthenticationFailureHandler;
 import shop.dalda.security.auth.OAuth2AuthenticationSuccessHandler;
 import shop.dalda.security.auth.user.CustomOAuth2UserService;
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final LogoutSuccessHandler logoutSuccessHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -57,6 +59,9 @@ public class SecurityConfig {
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler)
                 .failureHandler(oAuth2AuthenticationFailureHandler);
+
+        http.logout()
+                .logoutSuccessHandler(logoutSuccessHandler);
 
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
