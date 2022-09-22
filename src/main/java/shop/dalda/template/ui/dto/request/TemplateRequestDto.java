@@ -1,4 +1,4 @@
-package shop.dalda.template.dto.request;
+package shop.dalda.template.ui.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

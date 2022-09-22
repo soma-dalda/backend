@@ -1,4 +1,4 @@
-package shop.dalda.template;
+package shop.dalda.template.ui;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,11 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.security.auth.user.CustomOAuth2User;
-import shop.dalda.template.dto.request.TemplateRequestDto;
-import shop.dalda.template.dto.response.TemplateListResponseDto;
-import shop.dalda.template.dto.response.TemplateResponseDto;
-import shop.dalda.template.dto.request.TemplateUpdateRequestDto;
-import shop.dalda.template.dto.response.TemplateUpdateResponseDto;
+import shop.dalda.template.application.TemplateService;
+import shop.dalda.template.ui.dto.request.TemplateRequestDto;
+import shop.dalda.template.ui.dto.response.TemplateListResponseDto;
+import shop.dalda.template.ui.dto.response.TemplateResponseDto;
+import shop.dalda.template.ui.dto.request.TemplateUpdateRequestDto;
+import shop.dalda.template.ui.dto.response.TemplateUpdateResponseDto;
 
 import java.net.URI;
 

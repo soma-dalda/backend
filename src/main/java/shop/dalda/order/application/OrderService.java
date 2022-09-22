@@ -23,8 +23,8 @@ import shop.dalda.order.ui.dto.response.OrderResponseDto;
 import shop.dalda.order.ui.mapper.AnswerConverter;
 import shop.dalda.order.ui.mapper.OrderMapper;
 import shop.dalda.security.auth.user.CustomOAuth2User;
-import shop.dalda.template.Template;
-import shop.dalda.template.TemplateRepository;
+import shop.dalda.template.domain.Template;
+import shop.dalda.template.domain.repository.TemplateRepository;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
 
