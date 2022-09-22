@@ -71,6 +71,7 @@ public class TokenProvider {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
+                .domain(".dalda.shop")
                 .maxAge(TOKEN_EXPIRATION / 1000)
                 .path("/")
                 .build();
@@ -80,6 +81,7 @@ public class TokenProvider {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
+                .domain(".dalda.shop")
                 .maxAge((TOKEN_EXPIRATION * 48) / 1000)
                 .path("/")
                 .build();
