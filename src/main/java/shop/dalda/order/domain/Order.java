@@ -1,7 +1,7 @@
 package shop.dalda.order.domain;
 
 import lombok.*;
-import shop.dalda.order.JSONConverter;
+import shop.dalda.order.ui.mapper.AnswerConverter;
 import shop.dalda.template.Template;
 import shop.dalda.user.domain.User;
 
@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Getter
+@Setter
 @Table(name = "orders")
 public class Order {
 
@@ -36,7 +37,7 @@ public class Order {
     @Column(name = "img_url")
     private String image;
 
-    @Convert(converter = JSONConverter.class)
+    @Convert(converter = AnswerConverter.class)
     @Column(columnDefinition = "json")
     private List<Answer> templateResponses;
 
