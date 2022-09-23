@@ -34,6 +34,9 @@ public class TokenProvider {
     @Value("${app.auth.tokenSecret}")
     private String TOKEN_SECRET;
 
+    @Value("${app.oauth2.host}")
+    private String HOST;
+
     public void createTokens(Authentication authentication, HttpServletResponse response) {
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         // 유저 권한
@@ -71,17 +74,18 @@ public class TokenProvider {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .domain(".dalda.shop")
+                .domain(HOST)
                 .maxAge(TOKEN_EXPIRATION / 1000)
                 .path("/")
                 .build();
 
+        log.info("domain: " + accessCookie.getDomain());
         // refreshToken cookie
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .domain(".dalda.shop")
+                .domain(HOST)
                 .maxAge((TOKEN_EXPIRATION * 48) / 1000)
                 .path("/")
                 .build();
