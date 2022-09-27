@@ -77,7 +77,7 @@ public class User extends BaseTimeEntity{
     public User(String oauthId, String username) {
         this.oauthId = oauthId;
         this.username = username;
-        this.role = Role.GUEST;
+        this.role = Role.MEMBER;
         this.latestAt = LocalDate.now();
     }
 
@@ -96,7 +96,7 @@ public class User extends BaseTimeEntity{
         this.qnaLink = requestDto.getQnaLink();
         this.instaLink = requestDto.getInstaLink();
         this.etcLinks = requestDto.parsedEtcLinks();
-        this.role = Role.MEMBER;
+        this.role = Role.COMPANY;
     }
 
     public void updateUserInfo(UserUpdateRequest requestDto) {
