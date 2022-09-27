@@ -1,11 +1,9 @@
 package shop.dalda.user.ui.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Data;
 import shop.dalda.user.domain.Role;
 
-@Builder
 @Data
 public class UserAuthResponse {
     Long id;
