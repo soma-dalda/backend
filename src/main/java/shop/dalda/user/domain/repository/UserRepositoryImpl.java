@@ -1,7 +1,9 @@
 package shop.dalda.user.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import shop.dalda.user.ui.dto.QUserAuthResponse;
 import shop.dalda.user.ui.dto.QUserCompanyResponse;
+import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
 
 import javax.persistence.EntityManager;
@@ -15,6 +17,19 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     public UserRepositoryImpl(EntityManager em) {
         queryFactory = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public UserAuthResponse getUserAuthById(Long id) {
+        return queryFactory.select(new QUserAuthResponse(
+                user.id,
+                user.username,
+                user.userPhone,
+                user.role,
+                user.companyDomain
+        )).from(user)
+                .where(user.id.eq(id))
+                .fetchOne();
     }
 
     @Override

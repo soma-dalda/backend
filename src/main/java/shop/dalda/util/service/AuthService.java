@@ -18,6 +18,10 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final RedisService redisService;
 
+    public Authentication getAuthentication(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        return tokenProvider.getAuthentication(accessToken);
+    }
     public void refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
         // 리프레시 토큰 검증
         String oldRefreshToken = CookieUtil.getCookie(request, "refreshToken")

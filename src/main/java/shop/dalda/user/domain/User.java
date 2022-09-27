@@ -96,6 +96,7 @@ public class User extends BaseTimeEntity{
         this.qnaLink = requestDto.getQnaLink();
         this.instaLink = requestDto.getInstaLink();
         this.etcLinks = requestDto.parsedEtcLinks();
+        this.role = Role.MEMBER;
     }
 
     public void updateUserInfo(UserUpdateRequest requestDto) {
