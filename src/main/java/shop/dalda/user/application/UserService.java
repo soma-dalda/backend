@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
+import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
@@ -17,6 +18,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public UserAuthResponse getUserAuthById(Long id) {
+        return userRepository.getUserAuthById(id);
+    }
     @Transactional
     public void saveOrUpdate(User user) {
         // 최근 로그인 시간 갱신
