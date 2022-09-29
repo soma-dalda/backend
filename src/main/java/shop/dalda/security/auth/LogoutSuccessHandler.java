@@ -23,8 +23,8 @@ import java.util.Optional;
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     private final RedisService redisService;
     private final TokenProvider tokenProvider;
-    @Value("${app.oauth2.redirectUri}")
-    private String REDIRECT_URI;
+    @Value("${app.oauth2.defaultUri}")
+    private String DEFAULT_URI;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -42,6 +42,6 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
         }
 
         CookieUtil.deleteCookie(request, response, "refreshToken");
-        getRedirectStrategy().sendRedirect(request, response, REDIRECT_URI);
+        getRedirectStrategy().sendRedirect(request, response, DEFAULT_URI);
     }
 }
