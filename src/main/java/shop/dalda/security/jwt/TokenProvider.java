@@ -34,8 +34,8 @@ public class TokenProvider {
     @Value("${app.auth.tokenSecret}")
     private String TOKEN_SECRET;
 
-    @Value("${app.oauth2.host}")
-    private String HOST;
+    @Value("${app.oauth2.domain}")
+    private String DOMAIN;
 
     public void createTokens(Authentication authentication, HttpServletResponse response) {
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
@@ -74,7 +74,7 @@ public class TokenProvider {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .domain(HOST)
+                .domain(DOMAIN)
                 .maxAge(TOKEN_EXPIRATION / 1000)
                 .path("/")
                 .build();
@@ -85,7 +85,7 @@ public class TokenProvider {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Lax")
-                .domain(HOST)
+                .domain(DOMAIN)
                 .maxAge((TOKEN_EXPIRATION * 48) / 1000)
                 .path("/")
                 .build();
