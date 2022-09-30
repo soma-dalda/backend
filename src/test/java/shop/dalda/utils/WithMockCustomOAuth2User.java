@@ -10,5 +10,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface WithMockCustomOAuth2User {
     long id() default 1L;
     String password() default "";
-    String authority() default "GUEST";
+    String authority() default "MEMBER";
 }

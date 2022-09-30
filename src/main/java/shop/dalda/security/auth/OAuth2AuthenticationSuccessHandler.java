@@ -28,8 +28,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationSuccessHandler.class);
     private final CookieAuthorizationRequestRepository authorizationRequestRepository;
     private final TokenProvider tokenProvider;
-    @Value("${app.oauth2.redirectUri}")
-    private String REDIRECT_URI;
+
+    @Value("${app.oauth2.defaultUri}")
+    private String DEFAULT_URI;
+
+    @Value("${app.oauth2.host}")
+    private String HOST;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
@@ -49,12 +53,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // 쿠키에서 redirectUri 추출
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
-        // 설정된 redirectUri와 현재 요청 uri와 비교
 
+        // host 확인
         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new BadRequestException("일치하지 않는 redirectUri 입니다.");
+            throw new BadRequestException("unknown host");
         }
-        String targetUri = redirectUri.orElse(getDefaultTargetUrl());
+        String targetUri = redirectUri.orElse(DEFAULT_URI);
 
         // Token 생성
         tokenProvider.createTokens(authentication, response);
@@ -71,11 +75,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-        URI authorizedUri = URI.create(REDIRECT_URI);
+        URI clientRedirectUri = URI.create(uri.trim());
 
-        // host , port만 비교 (CSRF)
-        return authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                && authorizedUri.getPort() == clientRedirectUri.getPort();
+        // host 비교
+        return HOST.equalsIgnoreCase(clientRedirectUri.getHost());
     }
 }
