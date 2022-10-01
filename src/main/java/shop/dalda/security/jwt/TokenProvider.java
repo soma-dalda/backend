@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.util.CookieUtil;
 import shop.dalda.util.service.RedisService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +33,6 @@ public class TokenProvider {
 
     @Value("${app.auth.tokenSecret}")
     private String TOKEN_SECRET;
-
-    @Value("${app.oauth2.domain}")
-    private String DOMAIN;
 
     public void createTokens(Authentication authentication, HttpServletResponse response) {
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
@@ -69,30 +66,9 @@ public class TokenProvider {
         // Redis 저장소에 refreshToken 저장
         redisService.setValues(Long.toString(user.getId()), refreshToken, Duration.ofDays(1));
 
-        // accessToken cookie
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("Lax")
-                .domain(DOMAIN)
-                .maxAge(TOKEN_EXPIRATION / 1000)
-                .path("/")
-                .build();
-
-        log.info("domain: " + accessCookie.getDomain());
-        // refreshToken cookie
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("Lax")
-                .domain(DOMAIN)
-                .maxAge((TOKEN_EXPIRATION * 48) / 1000)
-                .path("/")
-                .build();
-
-        //응답헤더에 쿠키 add
-        response.addHeader("SET-COOKIE", accessCookie.toString());
-        response.addHeader("SET-COOKIE", refreshCookie.toString());
+        // addCookie
+        CookieUtil.addCookie(response, "accessToken", accessToken, TOKEN_EXPIRATION / 1000);
+        CookieUtil.addCookie(response, "refreshToken", refreshToken, (TOKEN_EXPIRATION * 48) / 1000);
     }
 
     //AccessToken 을 검사하고 Authentication 객체 생성
