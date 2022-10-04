@@ -1,13 +1,10 @@
 package shop.dalda.user.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import shop.dalda.user.ui.dto.QUserAuthResponse;
-import shop.dalda.user.ui.dto.QUserCompanyResponse;
-import shop.dalda.user.ui.dto.UserAuthResponse;
-import shop.dalda.user.ui.dto.UserCompanyResponse;
+import shop.dalda.user.ui.dto.*;
 
 import javax.persistence.EntityManager;
-
+import java.util.List;
 
 import static shop.dalda.user.domain.QUser.user;
 
@@ -27,7 +24,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.userPhone,
                 user.role,
                 user.companyDomain
-        )).from(user)
+        ))
+                .from(user)
                 .where(user.id.eq(id))
                 .fetchOne();
     }
@@ -44,8 +42,22 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.qnaLink,
                 user.instaLink,
                 user.etcLinks
-        )).from(user)
+        ))
+                .from(user)
                 .where(user.companyDomain.eq(companyDomain))
                 .fetchOne();
+    }
+
+    @Override
+    public List<UserCompanyListResponse> getCompanyListByRecentLogin() {
+        return queryFactory.select(new QUserCompanyListResponse(
+                user.companyName,
+                user.companyDomain,
+                user.profileImage
+        ))
+                .from(user)
+                .orderBy(user.latestAt.desc())
+                .limit(10)
+                .fetch();
     }
 }

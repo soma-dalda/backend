@@ -6,10 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
-import shop.dalda.user.ui.dto.UserAuthResponse;
-import shop.dalda.user.ui.dto.UserCompanyRequest;
-import shop.dalda.user.ui.dto.UserCompanyResponse;
-import shop.dalda.user.ui.dto.UserUpdateRequest;
+import shop.dalda.user.ui.dto.*;
+
+import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -44,5 +43,9 @@ public class UserService {
 
     public UserCompanyResponse getCompanyPage(String companyDomain) {
         return userRepository.getCompanyByDomain(companyDomain);
+    }
+
+    public List<UserCompanyListResponse> getCompanyList() {
+        return userRepository.getCompanyListByRecentLogin();
     }
 }
