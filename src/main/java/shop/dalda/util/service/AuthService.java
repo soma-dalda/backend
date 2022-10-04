@@ -18,9 +18,12 @@ public class AuthService {
     private final TokenProvider tokenProvider;
     private final RedisService redisService;
 
-    public Authentication getAuthentication(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        return tokenProvider.getAuthentication(accessToken);
+    public CustomOAuth2User getAuthenticationIsNull(HttpServletRequest request, CustomOAuth2User user) {
+        if (user == null) {
+            String accessToken = request.getHeader("Authorization");
+            user = (CustomOAuth2User)tokenProvider.getAuthentication(accessToken);
+        }
+        return user;
     }
     public void refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
         // 리프레시 토큰 검증

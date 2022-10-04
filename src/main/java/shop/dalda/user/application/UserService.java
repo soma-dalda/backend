@@ -6,10 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
-import shop.dalda.user.ui.dto.UserAuthResponse;
-import shop.dalda.user.ui.dto.UserCompanyRequest;
-import shop.dalda.user.ui.dto.UserCompanyResponse;
-import shop.dalda.user.ui.dto.UserUpdateRequest;
+import shop.dalda.user.ui.dto.*;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -32,6 +29,13 @@ public class UserService {
     public void updateUser(CustomOAuth2User currentUser, UserUpdateRequest requestDto) throws Exception {
         User findUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new Exception("존재하지 않는 유저입니다."));
         findUser.updateUserInfo(requestDto);
+        userRepository.save(findUser);
+    }
+
+    @Transactional
+    public void updateUserProfileImage(CustomOAuth2User currentUser, UserProfileImageRequest requestDto) throws Exception {
+        User findUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new Exception("존재하지 않는 유저입니다."));
+        findUser.updateProfile(requestDto);
         userRepository.save(findUser);
     }
 

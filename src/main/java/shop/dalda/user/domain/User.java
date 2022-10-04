@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.*;
 import shop.dalda.order.domain.Order;
 import shop.dalda.template.domain.Template;
-import shop.dalda.user.ui.dto.*;
+import shop.dalda.user.ui.dto.UserCompanyRequest;
+import shop.dalda.user.ui.dto.UserProfileImageRequest;
+import shop.dalda.user.ui.dto.UserUpdateRequest;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -102,5 +104,9 @@ public class User extends BaseTimeEntity{
     public void updateUserInfo(UserUpdateRequest requestDto) {
         this.username = requestDto.getUsername();
         this.userPhone = requestDto.getUserPhone();
+    }
+
+    public void updateProfile(UserProfileImageRequest requestDto) {
+        this.profileImage = requestDto.getImageUrl();
     }
 }
