@@ -1,6 +1,7 @@
 package shop.dalda.user.domain.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import shop.dalda.user.domain.Role;
 import shop.dalda.user.ui.dto.*;
 
 import javax.persistence.EntityManager;
@@ -56,6 +57,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.profileImage
         ))
                 .from(user)
+                .where(user.role.eq(Role.COMPANY))
                 .orderBy(user.latestAt.desc())
                 .limit(10)
                 .fetch();
