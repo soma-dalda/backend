@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CookieAuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
-    public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    //public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
     private static final int COOKIE_EXPIRE_SECONDS = 180;
 
     @Override
@@ -27,19 +27,22 @@ public class CookieAuthorizationRequestRepository implements AuthorizationReques
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
         if (authorizationRequest == null) {
             CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+            //CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
             return;
         }
 
         // 쿠키에 저장
         // authorizationRequest
         CookieUtil.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtil.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
-        String redirectUriAfterLogin = request.getHeader("REFERER");
-
-        // redirectUri
-        if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
-            CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
-        }
+        /**
+         * 로그인 요청 이전 페이지(referer) 정보를 redirect uri로 쿠키 저장 (추가 예정)
+         * String redirectUriAfterLogin = request.getHeader("REFERER");
+         *
+         *         // redirectUri
+         *         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
+         *             CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
+         *             }
+         */
     }
 
     @Override
@@ -50,7 +53,7 @@ public class CookieAuthorizationRequestRepository implements AuthorizationReques
     // authorizationRequest, redirectUri 쿠키 삭제
     public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-        CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
+        //CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
     }
 
 }
