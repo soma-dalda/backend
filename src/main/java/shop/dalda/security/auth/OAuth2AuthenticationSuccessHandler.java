@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static shop.dalda.security.auth.CookieAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-
 @RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -50,15 +48,20 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        // 쿠키에서 redirectUri 추출
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
+        /**
+         * redirect
+         * // 쿠키에서 redirectUri 추출
+         *         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+         *                 .map(Cookie::getValue);
+         *
+         *         // host 확인
+         *         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+         *             throw new BadRequestException("unknown host");
+         *         }
+         *         String targetUri = redirectUri.orElse(DEFAULT_URI);
+         */
 
-        // host 확인
-        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new BadRequestException("unknown host");
-        }
-        String targetUri = redirectUri.orElse(DEFAULT_URI);
+        String targetUri = DEFAULT_URI;
 
         // Token 생성
         tokenProvider.createTokens(authentication, response);
