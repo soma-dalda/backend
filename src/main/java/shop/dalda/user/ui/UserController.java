@@ -14,7 +14,7 @@ import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
-import shop.dalda.util.service.AuthService;
+import shop.dalda.user.application.UserAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,13 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     private final UserService userService;
-    private final AuthService authService;
+    private final UserAuthService userAuthService;
 
     @Operation(summary = "유저정보 조회", description = "Request에 필요한 유저정보 반환")
     @GetMapping()
     public ResponseEntity<UserAuthResponse> getUserAuth(HttpServletRequest request, @AuthenticationPrincipal CustomOAuth2User currentUser) {
         if (currentUser == null) {
-            currentUser = (CustomOAuth2User)authService.getAuthentication(request);
+            currentUser = (CustomOAuth2User) userAuthService.getAuthentication(request);
         }
 
         UserAuthResponse res = userService.getUserAuthById(currentUser.getId());
