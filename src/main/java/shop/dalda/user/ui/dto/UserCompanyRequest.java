@@ -4,18 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import shop.dalda.user.domain.BusinessHour;
 import shop.dalda.user.domain.CompanyLink;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Data
 public class UserCompanyRequest {
     @Schema(description = "업체명", defaultValue = "업체명")

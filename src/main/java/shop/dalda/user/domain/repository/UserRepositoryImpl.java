@@ -24,7 +24,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.username,
                 user.userPhone,
                 user.role,
-                user.companyDomain
+                user.companyName,
+                user.companyIntroduction,
+                user.companyLocation,
+                user.companyDomain,
+                user.businessHours,
+                user.qnaLink,
+                user.instaLink,
+                user.etcLinks
         ))
                 .from(user)
                 .where(user.id.eq(id))
