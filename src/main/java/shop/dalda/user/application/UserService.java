@@ -8,8 +8,6 @@ import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
 import shop.dalda.user.ui.dto.*;
 
-import java.util.List;
-
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -31,6 +29,13 @@ public class UserService {
     public void updateUser(CustomOAuth2User currentUser, UserUpdateRequest requestDto) throws Exception {
         User findUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new Exception("존재하지 않는 유저입니다."));
         findUser.updateUserInfo(requestDto);
+        userRepository.save(findUser);
+    }
+
+    @Transactional
+    public void updateUserProfileImage(CustomOAuth2User currentUser, UserProfileImageRequest requestDto) throws Exception {
+        User findUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new Exception("존재하지 않는 유저입니다."));
+        findUser.updateProfile(requestDto);
         userRepository.save(findUser);
     }
 
