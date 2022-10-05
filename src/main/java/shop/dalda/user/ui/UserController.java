@@ -1,6 +1,7 @@
 package shop.dalda.user.ui;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.user.application.UserAuthService;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserProfileImageRequest;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
-import shop.dalda.util.service.AuthService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,23 +26,20 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     private final UserService userService;
-    private final AuthService authService;
+    private final UserAuthService userAuthService;
 
     @Operation(summary = "유저정보 조회", description = "Request에 필요한 유저정보 반환")
     @GetMapping()
-    public ResponseEntity<UserAuthResponse> getUserAuth(HttpServletRequest request,
-                                                        @AuthenticationPrincipal CustomOAuth2User currentUser) {
-        currentUser = authService.getAuthenticationIsNull(request, currentUser);
+    public ResponseEntity<UserAuthResponse> getUserAuth(HttpServletRequest request, @AuthenticationPrincipal CustomOAuth2User currentUser) {
+        currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
         UserAuthResponse res = userService.getUserAuthById(currentUser.getId());
         return ResponseEntity.ok().body(res);
     }
-    @Operation(summary = "유저정보 수정", description = "유저정보를 수정하는 메서드 (사용자 이름, 전화번호)")
+    @Operation(summary = "유저정보 수정", description = "유저정보를 수정하는 메서드")
     @PatchMapping()
-    public void updateUser(HttpServletRequest request,
-                           UserUpdateRequest requestDto,
-                           @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
-        currentUser = authService.getAuthenticationIsNull(request, currentUser);
+    public void updateUser(UserUpdateRequest requestDto,
+                           @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
         userService.updateUser(currentUser, requestDto);
     }
 
@@ -50,7 +48,7 @@ public class UserController {
     public void updateProfileImage(HttpServletRequest request,
                                    UserProfileImageRequest requestDto,
                                    @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
-        currentUser = authService.getAuthenticationIsNull(request, currentUser);
+        currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
         userService.updateUserProfileImage(currentUser, requestDto);
     }

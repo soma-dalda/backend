@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import shop.dalda.auth.WithMockUser;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
-import shop.dalda.util.service.AuthService;
+import shop.dalda.user.application.UserAuthService;
 
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
-    @MockBean AuthService authService;
+    @MockBean
+    UserAuthService userAuthService;
     @MockBean UserService userService;
 
     @Autowired private MockMvc mockMvc;

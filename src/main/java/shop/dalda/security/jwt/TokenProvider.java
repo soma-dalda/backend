@@ -34,7 +34,7 @@ public class TokenProvider {
     @Value("${app.auth.tokenSecret}")
     private String TOKEN_SECRET;
 
-    public void createTokens(Authentication authentication, HttpServletResponse response) {
+    public String createAccessToken(Authentication authentication, HttpServletResponse response) {
         CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
         // 유저 권한
         String role = authentication.getAuthorities().stream()
@@ -42,18 +42,24 @@ public class TokenProvider {
                 .collect(Collectors.joining(","));
 
         Date now = new Date();
-        Date AccessExpiration = new Date(now.getTime() + TOKEN_EXPIRATION); // 30분
-        Date refreshExpiration = new Date(now.getTime() + TOKEN_EXPIRATION * 48); // 1일
+        Date expiration = new Date(now.getTime() + TOKEN_EXPIRATION); // 30분
 
         //build accessToken
-        String accessToken =
-                Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
-                .setSubject(Long.toString(user.getId()))
-                .claim("role", role)
-                .setIssuedAt(now)
-                .setExpiration(AccessExpiration)
-                .compact();
+        return Jwts.builder()
+                        .signWith(SignatureAlgorithm.HS512, TOKEN_SECRET)
+                        .setSubject(Long.toString(user.getId()))
+                        .claim("role", role)
+                        .setIssuedAt(now)
+                        .setExpiration(expiration)
+                        .compact();
+    }
+
+    public void createRefreshToken(Authentication authentication, HttpServletResponse response) {
+        CustomOAuth2User user = (CustomOAuth2User) authentication.getPrincipal();
+
+        Date now = new Date();
+        Date refreshExpiration = new Date(now.getTime() + TOKEN_EXPIRATION * 48); // 1일
+
 
         //build refreshToken
         String refreshToken =
@@ -67,12 +73,10 @@ public class TokenProvider {
         redisService.setValues(Long.toString(user.getId()), refreshToken, Duration.ofDays(1));
 
         // addCookie
-        CookieUtil.addCookie(response, "accessToken", accessToken, TOKEN_EXPIRATION / 1000);
         CookieUtil.addCookie(response, "refreshToken", refreshToken, (TOKEN_EXPIRATION * 48) / 1000);
     }
 
     //AccessToken 을 검사하고 Authentication 객체 생성
-    //@AuthenticationPrincipal 로 컨트롤러에서 꺼내쓸수있음
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 

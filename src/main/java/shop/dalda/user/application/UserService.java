@@ -8,6 +8,8 @@ import shop.dalda.user.domain.User;
 import shop.dalda.user.domain.repository.UserRepository;
 import shop.dalda.user.ui.dto.*;
 
+import java.util.List;
+
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service

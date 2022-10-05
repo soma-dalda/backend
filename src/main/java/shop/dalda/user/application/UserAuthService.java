@@ -1,4 +1,4 @@
-package shop.dalda.util.service;
+package shop.dalda.user.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.security.jwt.TokenProvider;
 import shop.dalda.util.CookieUtil;
+import shop.dalda.util.service.RedisService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequiredArgsConstructor
 @Service
-public class AuthService {
+public class UserAuthService {
 
     private final TokenProvider tokenProvider;
     private final RedisService redisService;
@@ -25,8 +26,10 @@ public class AuthService {
         }
         return user;
     }
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response, String oldAccessToken) {
+
+    public String refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // 리프레시 토큰 검증
+        String oldAccessToken = request.getHeader("Authorization");
         String oldRefreshToken = CookieUtil.getCookie(request, "refreshToken")
                 .map(Cookie::getValue).orElseThrow(() -> new RuntimeException("리프레시 토큰이 존재하지 않습니다.."));
 
@@ -42,12 +45,14 @@ public class AuthService {
         // Redis 에 저장된 refreshToken
         String savedRefreshToken = redisService.getValues(Long.toString(userId));
 
-        // 요청에 담긴 refresh token 과 비교
+        // 요청 refresh token 과 비교
         if (!savedRefreshToken.equals(oldRefreshToken)) {
             throw new RuntimeException("일치하지 않는 리프레시 토큰입니다.");
         }
 
         // 토큰 재발급
-        tokenProvider.createTokens(authentication, response);
+        String accessToken = tokenProvider.createAccessToken(authentication, response);
+        tokenProvider.createRefreshToken(authentication, response);
+        return accessToken;
     }
 }
