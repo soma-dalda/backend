@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.user.application.UserAuthService;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
-import shop.dalda.user.application.UserAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,9 +30,7 @@ public class UserController {
     @Operation(summary = "유저정보 조회", description = "Request에 필요한 유저정보 반환")
     @GetMapping()
     public ResponseEntity<UserAuthResponse> getUserAuth(HttpServletRequest request, @AuthenticationPrincipal CustomOAuth2User currentUser) {
-        if (currentUser == null) {
-            currentUser = (CustomOAuth2User) userAuthService.getAuthentication(request);
-        }
+        currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
         UserAuthResponse res = userService.getUserAuthById(currentUser.getId());
         return ResponseEntity.ok().body(res);
