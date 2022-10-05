@@ -14,6 +14,7 @@ import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.application.UserAuthService;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserAuthResponse;
+import shop.dalda.user.ui.dto.UserProfileImageRequest;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,5 +43,13 @@ public class UserController {
         userService.updateUser(currentUser, requestDto);
     }
 
+    @Operation(summary = "유저 프로필 이미지 변경", description = "유저의 프로필 이미지를 변경하는 메서드")
+    @PatchMapping("/profile")
+    public void updateProfileImage(HttpServletRequest request,
+                                   UserProfileImageRequest requestDto,
+                                   @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
+        currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
+        userService.updateUserProfileImage(currentUser, requestDto);
+    }
 }
