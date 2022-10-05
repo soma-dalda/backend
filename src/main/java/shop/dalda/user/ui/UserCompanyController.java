@@ -11,8 +11,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.application.UserService;
+import shop.dalda.user.ui.dto.UserCompanyListResponse;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
+
+import java.util.List;
 
 @Tag(name = "UserCompanyController")
 @RequiredArgsConstructor
@@ -26,7 +29,7 @@ public class UserCompanyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업체 등록/수정 성공")
     })
-    @PatchMapping("")
+    @PatchMapping()
     public void updateCompany(UserCompanyRequest requestDto,
                               @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
         userService.saveOrUpdateCompany(currentUser, requestDto);
@@ -37,5 +40,12 @@ public class UserCompanyController {
     public ResponseEntity<UserCompanyResponse> company(@Parameter(name = "업체 도메인") @PathVariable String companyDomain) {
         UserCompanyResponse response = userService.getCompanyPage(companyDomain);
         return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "업체 리스트 조회", description = "최근 로그인 기준 업체 10개 조회")
+    @GetMapping()
+    public ResponseEntity<List<UserCompanyListResponse>> getCompanyList() {
+        List<UserCompanyListResponse> resultList = userService.getCompanyList();
+        return ResponseEntity.ok().body(resultList);
     }
 }

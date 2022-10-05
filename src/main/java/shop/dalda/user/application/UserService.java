@@ -49,4 +49,8 @@ public class UserService {
     public UserCompanyResponse getCompanyPage(String companyDomain) {
         return userRepository.getCompanyByDomain(companyDomain);
     }
+
+    public List<UserCompanyListResponse> getCompanyList() {
+        return userRepository.getCompanyListByRecentLogin();
+    }
 }
