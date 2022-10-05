@@ -40,25 +40,24 @@ class UserControllerTest {
     @WithMockUser()
     void saveOrUpdate_company() throws Exception {
         //given
-        UserCompanyRequest request = UserCompanyRequest.builder()
-                .companyName("업체명")
-                .companyDomain("도메인")
-                .companyIntroduction("소개소개")
-                .companyPhone("02-1111-1111")
-                .companyLocation("서울 강남구")
-                .businessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                        "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                        "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]")
-                .profileImage("url")
-                .qnaLink("qnaLink")
-                .instaLink("instaLink")
-                .etcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]")
-                .build();
+        UserCompanyRequest requestDto = new UserCompanyRequest();
+        requestDto.setCompanyName("업체명");
+        requestDto.setCompanyDomain("도메인");
+        requestDto.setCompanyIntroduction("소개소개");
+        requestDto.setCompanyPhone("02-1111-1111");
+        requestDto.setCompanyLocation("서울 강남구");
+        requestDto.setBusinessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
+                "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
+                "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]");
+        requestDto.setProfileImage("url");
+        requestDto.setQnaLink("qnaLink");
+        requestDto.setInstaLink("instaLink");
+        requestDto.setEtcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]");
         //when
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/user-company")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJsonString(request)));
+                .content(toJsonString(requestDto)));
         //then
 
         resultActions
