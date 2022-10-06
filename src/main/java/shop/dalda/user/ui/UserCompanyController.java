@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.user.application.UserAuthService;
 import shop.dalda.user.application.UserService;
 import shop.dalda.user.ui.dto.UserCompanyListResponse;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Tag(name = "UserCompanyController")
@@ -24,14 +26,17 @@ import java.util.List;
 public class UserCompanyController {
 
     private final UserService userService;
+    private final UserAuthService userAuthService;
 
     @Operation(summary = "업체 등록/수정", description = "유저가 업체를 등록/수정하는 메서드")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업체 등록/수정 성공")
     })
     @PatchMapping()
-    public void updateCompany(UserCompanyRequest requestDto,
-                              @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
+    public void updateCompany(HttpServletRequest request,
+                              UserCompanyRequest requestDto,
+                              @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
+        currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.saveOrUpdateCompany(currentUser, requestDto);
     }
 
