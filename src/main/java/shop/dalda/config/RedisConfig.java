@@ -1,6 +1,7 @@
 package shop.dalda.config;
 
 import io.lettuce.core.ReadFrom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStaticMasterReplicaConfiguration;
@@ -9,14 +10,11 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+@RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
 
     final RedisProperties properties;
-
-    public RedisConfig(RedisProperties properties) {
-        this.properties = properties;
-    }
 
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
