@@ -1,17 +1,30 @@
 package shop.dalda.config;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Data
 @ConfigurationProperties(prefix = "redis")
-@Configuration
+@Component
 public class RedisProperties {
-    private String host;
-    private int port;
-    private RedisProperties main;
-    private List<RedisProperties> replicas;
+
+    private Main main = new Main();
+    private List<Replica> replicas;
+
+    @Data
+    @RequiredArgsConstructor
+    public static class Main {
+        private String host;
+        private int port;
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    public static class Replica {
+        private String host;
+        private int port;
+    }
 }
