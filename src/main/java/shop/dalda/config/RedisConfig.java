@@ -1,28 +1,31 @@
 package shop.dalda.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import io.lettuce.core.ReadFrom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStaticMasterReplicaConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@EnableRedisRepositories
+@RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private int port;
+    final RedisProperties properties;
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+    public LettuceConnectionFactory redisConnectionFactory() {
+        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+                .readFrom(ReadFrom.REPLICA_PREFERRED)
+                .build();
+        RedisStaticMasterReplicaConfiguration staticMasterReplicaConfiguration =
+                new RedisStaticMasterReplicaConfiguration(properties.getMain().getHost(), properties.getMain().getPort());
+
+        properties.getReplicas().forEach(replica -> staticMasterReplicaConfiguration.addNode(replica.getHost(), replica.getPort()));
+        return new LettuceConnectionFactory(staticMasterReplicaConfiguration, clientConfig);
     }
 
     @Bean
