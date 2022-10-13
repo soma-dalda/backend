@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import shop.dalda.security.auth.user.CustomOAuth2User;
@@ -32,6 +33,7 @@ public class UserCompanyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업체 등록/수정 성공")
     })
+    @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping()
     public void updateCompany(HttpServletRequest request,
                               UserCompanyRequest requestDto,
@@ -42,7 +44,7 @@ public class UserCompanyController {
 
     @Operation(summary = "업체 조회", description = "도메인 이름으로 업체정보를 조회하는 메서드")
     @GetMapping("/{companyDomain}")
-    public ResponseEntity<UserCompanyResponse> company(@Parameter(name = "업체 도메인") @PathVariable String companyDomain) {
+    public ResponseEntity<UserCompanyResponse> getCompanyPage(@Parameter(name = "companyDomain") @PathVariable String companyDomain) {
         UserCompanyResponse response = userService.getCompanyPage(companyDomain);
         return ResponseEntity.ok().body(response);
     }
