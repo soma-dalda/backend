@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 user.profileImage
         ))
                 .from(user)
-                .where(user.role.eq(Role.COMPANY))
+                .where(user.role.eq(Role.ROLE_COMPANY))
                 .orderBy(user.latestAt.desc())
                 .limit(10)
                 .fetch();

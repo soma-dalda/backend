@@ -18,7 +18,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
         Collection<GrantedAuthority> roles = new ArrayList<>();
-        roles.add(Role.MEMBER::toString);
+        roles.add(Role.ROLE_MEMBER::toString);
 
         CustomOAuth2User principal = CustomOAuth2User.builder()
                 .id(annotation.id())
