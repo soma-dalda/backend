@@ -41,6 +41,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public UserCompanyResponse getCompanyByDomain(String companyDomain) {
         return queryFactory.select(new QUserCompanyResponse(
+                user.id,
                 user.companyName,
                 user.companyLocation,
                 user.companyPhone,
