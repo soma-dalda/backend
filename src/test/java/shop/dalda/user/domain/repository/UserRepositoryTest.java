@@ -1,7 +1,6 @@
 package shop.dalda.user.domain.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.domain.BusinessHour;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 
 import javax.persistence.EntityManager;
+import java.util.Optional;
 
 @ActiveProfiles("dev")
 @SpringBootTest
@@ -70,12 +69,11 @@ class UserRepositoryTest {
                 user.getInstaLink(),
                 user.getEtcLinks());
         //when
-        UserAuthResponse response = userRepository.getUserAuthById(user.getId());
+        Optional<UserAuthResponse> response = userRepository.getUserAuthById(user.getId());
         //then
-        System.out.println("role : " + response.getRole());
-        for (BusinessHour hour : response.getBusinessHours()) {
+        for (BusinessHour hour : response.get().getBusinessHours()) {
             System.out.printf("%s요일, %s:%s\n",hour.getDay(), hour.getStart(), hour.getEnd());
         }
-        Assertions.assertThat(expectResponse).isEqualTo(response);
+        Assertions.assertThat(expectResponse).isEqualTo(response.get());
     }
 }
