@@ -96,17 +96,23 @@ public class TokenProvider {
         }
     }
 
+    // Bearer 잘라내기
+    public String parseBearerToken(String token) {
+        return token.substring(7);
+    }
+
     // Access Token 검증
     public Boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(TOKEN_SECRET).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            log.info("만료된 토큰입니다.");
+            throw new JwtException("만료된 토큰입니다.");
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 토큰입니다.");
+            throw new JwtException("지원되지 않는 토큰입니다.");
         } catch (IllegalStateException e) {
-            log.info("잘못된 토큰입니다.");
+            throw new JwtException("잘못된 토큰입니다.");
+        } catch (Exception ignored) {
         }
         return false;
     }

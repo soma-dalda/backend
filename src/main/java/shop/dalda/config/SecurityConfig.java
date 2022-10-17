@@ -17,6 +17,7 @@ import shop.dalda.security.auth.user.CustomOAuth2UserService;
 import shop.dalda.security.jwt.JwtAccessDeniedHandler;
 import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
 import shop.dalda.security.jwt.JwtAuthenticationFilter;
+import shop.dalda.security.jwt.JwtExceptionFilter;
 
 
 @RequiredArgsConstructor
@@ -32,6 +33,8 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
+
     private static final String[] ignores = {
             "/favicon.ico",
             "/error",
@@ -78,6 +81,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler);
 
         http.addFilterBefore(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
