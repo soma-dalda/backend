@@ -25,31 +25,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = parseBearerToken(request);
+        String token = getTokenFromHeader(request);
 
-        //Access Token 검사
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-            //Authentication 객체 생성
-            Authentication authentication = tokenProvider.getAuthentication(token);
-            // SecurityContextHolder의 SecurityContext에 Authentication 객체 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug(authentication.getName() + "의 인증정보 저장");
-        } else {
-            log.debug("유효한 토큰이 없습니다.");
+        if (StringUtils.hasText(token) && token.startsWith("Bearer")) {
+            //Access Token 검사
+            String parsedToken = tokenProvider.parseBearerToken(token);
+
+            if (tokenProvider.validateToken(parsedToken)) {
+                //Authentication 객체 생성
+                Authentication authentication = tokenProvider.getAuthentication(parsedToken);
+                // SecurityContextHolder의 SecurityContext에 Authentication 객체 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info(authentication.getName() + "의 인증정보 저장");
+            } else {
+                log.info("유효한 토큰이 아닙니다.");
+            }
         }
-
+        else {
+            log.info("올바른 토큰이 아닙니다.");
+        }
         filterChain.doFilter(request, response);
     }
 
-    private String parseBearerToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-
-        //Access Token 파싱
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
+    public String getTokenFromHeader(HttpServletRequest request) {
+        return request.getHeader("Authorization");
     }
-
 
 }

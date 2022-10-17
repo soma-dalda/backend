@@ -6,6 +6,7 @@ import shop.dalda.user.ui.dto.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static shop.dalda.user.domain.QUser.user;
 
@@ -18,8 +19,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public UserAuthResponse getUserAuthById(Long id) {
-        return queryFactory.select(new QUserAuthResponse(
+    public Optional<UserAuthResponse> getUserAuthById(Long id) {
+        return Optional.ofNullable(queryFactory.select(new QUserAuthResponse(
                 user.id,
                 user.username,
                 user.userPhone,
@@ -35,12 +36,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         ))
                 .from(user)
                 .where(user.id.eq(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
-    public UserCompanyResponse getCompanyByDomain(String companyDomain) {
-        return queryFactory.select(new QUserCompanyResponse(
+    public Optional<UserCompanyResponse> getCompanyByDomain(String companyDomain) {
+        return Optional.ofNullable(queryFactory.select(new QUserCompanyResponse(
                 user.id,
                 user.companyName,
                 user.companyLocation,
@@ -54,7 +55,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         ))
                 .from(user)
                 .where(user.companyDomain.eq(companyDomain))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override

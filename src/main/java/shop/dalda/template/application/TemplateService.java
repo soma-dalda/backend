@@ -16,7 +16,7 @@ import shop.dalda.template.ui.dto.request.TemplateRequestDto;
 import shop.dalda.template.ui.dto.response.TemplateListResponseDto;
 import shop.dalda.template.ui.dto.response.TemplateResponseDto;
 import shop.dalda.exception.template.TemplateInvalidException;
-import shop.dalda.exception.UserNotFoundException;
+import shop.dalda.exception.user.auth.UserNotFoundException;
 import shop.dalda.template.ui.dto.request.TemplateUpdateRequestDto;
 import shop.dalda.template.ui.dto.response.TemplateUpdateResponseDto;
 import shop.dalda.user.domain.User;
