@@ -3,7 +3,6 @@ package shop.dalda.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +17,7 @@ import shop.dalda.security.auth.user.CustomOAuth2UserService;
 import shop.dalda.security.jwt.JwtAccessDeniedHandler;
 import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
 import shop.dalda.security.jwt.JwtAuthenticationFilter;
+import shop.dalda.security.jwt.JwtExceptionFilter;
 
 
 @RequiredArgsConstructor
@@ -33,6 +33,19 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
+
+    private static final String[] ignores = {
+            "/favicon.ico",
+            "/error",
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/v3/api-docs",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,7 +58,7 @@ public class SecurityConfig {
 
         //접근권한
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                        .anyRequest().permitAll();
 
         http.formLogin().disable();
 
@@ -68,6 +81,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler);
 
         http.addFilterBefore(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -75,8 +89,7 @@ public class SecurityConfig {
     @Order(0)
     @Bean
     public SecurityFilterChain resources(HttpSecurity http) throws Exception {
-        //example
-        http.requestMatchers(matchers -> matchers.antMatchers("/resource/**"))
+        http.requestMatchers(matchers -> matchers.antMatchers(ignores))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .requestCache().disable()
                 .securityContext().disable()
