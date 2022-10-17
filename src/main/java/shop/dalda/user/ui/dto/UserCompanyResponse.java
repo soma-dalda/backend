@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class UserCompanyResponse {
+    Long id;
     String companyName;
     String companyLocation;
     String companyPhone;
@@ -20,7 +21,8 @@ public class UserCompanyResponse {
     List<CompanyLink> etcLinks;
 
     @QueryProjection
-    public UserCompanyResponse(String companyName, String companyLocation, String companyPhone, String companyIntroduction, List<BusinessHour> businessHours, String profileImage, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {
+    public UserCompanyResponse(Long id, String companyName, String companyLocation, String companyPhone, String companyIntroduction, List<BusinessHour> businessHours, String profileImage, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {
+        this.id = id;
         this.companyName = companyName;
         this.companyLocation = companyLocation;
         this.companyPhone = companyPhone;
