@@ -2,14 +2,13 @@ package shop.dalda.template.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.template.TemplateNotBelongToUserException;
 import shop.dalda.exception.template.TemplateNotFoundException;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.template.domain.content.Content;
+import shop.dalda.template.domain.content.ContentFactory;
 import shop.dalda.template.domain.Template;
 import shop.dalda.template.domain.repository.TemplateRepository;
 import shop.dalda.template.ui.dto.request.TemplateRequestDto;
@@ -36,21 +35,17 @@ public class TemplateService {
     private final UserRepository userRepository;
 
     public Long insertTemplate(TemplateRequestDto templateRequestDto,
-                               CustomOAuth2User authUser) throws ParseException {
+                               CustomOAuth2User authUser) {
+
         // User 객체 생성
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
-
-        // Template 유효성 검사
-        if (!isTemplateValid(templateRequestDto.getContent())) {
-            throw new TemplateInvalidException();
-        }
 
         // Template 객체 생성
         Template template = Template.builder()
                 .user(user)
                 .title(templateRequestDto.getTitle())
-                .content(templateRequestDto.getContent())
+                .content(convertToContent(templateRequestDto.getContentList()))
                 .build();
 
         // DB 저장
@@ -59,29 +54,7 @@ public class TemplateService {
         return template.getId();
     }
 
-    private Boolean isTemplateValid(String content) throws ParseException {
-        JSONArray jsonArray = convertStringToJsonArray(content);
-
-        //각 질문마다 유효성 검사
-        for (Object object : jsonArray) {
-            JSONObject jsonObject = (JSONObject) object;
-
-            // 주관 장문
-            // singleObjective, multiObjective
-            // shortSubjective, longSubjective
-            // image
-            System.out.println(jsonObject.get("type"));
-            System.out.println(jsonObject.get("required"));
-            System.out.println(jsonObject.get("question"));
-            System.out.println(jsonObject.get("img"));
-            System.out.println(jsonObject.get("options"));
-            System.out.println();
-        }
-
-        return true;
-    }
-
-    public TemplateResponseDto selectTemplate(Long templateId) throws ParseException {
+    public TemplateResponseDto selectTemplate(Long templateId) {
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(TemplateNotFoundException::new);
 
@@ -89,7 +62,7 @@ public class TemplateService {
                 .id(template.getId())
                 .userId(template.getUser().getId())
                 .title(template.getTitle())
-                .content(convertStringToJsonArray(template.getContent()))
+                .contentList(template.getContent())
                 .build();
     }
 
@@ -114,7 +87,8 @@ public class TemplateService {
 
     public TemplateUpdateResponseDto updateTemplate(Long templateId,
                                                     TemplateUpdateRequestDto templateUpdateRequestDto,
-                                                    CustomOAuth2User authUser) throws ParseException {
+                                                    CustomOAuth2User authUser) {
+
         //User 객체 생성
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
@@ -130,15 +104,21 @@ public class TemplateService {
 
         // template 수정
         template.updateTitle(templateUpdateRequestDto.getTitle());
-        template.updateContent(templateUpdateRequestDto.getContent());
+        template.updateContent(convertToContent(templateUpdateRequestDto.getContentList()));
 
         return TemplateUpdateResponseDto.builder().id(template.getId()).userId(template.getUser().getId()).title(template.getTitle())
-                .content(convertStringToJsonArray(template.getContent()))
+                .contentList(template.getContent())
                 .build();
     }
 
-    private JSONArray convertStringToJsonArray(String jsonString) throws ParseException {
-        JSONParser jsonParser = new JSONParser();
-        return (JSONArray) jsonParser.parse(jsonString);
+    //각 질문을 Content 객체로 변환
+    public List<Content> convertToContent(List<JSONObject> contents) {
+        List<Content> convertedContents = new ArrayList<>();
+        for (JSONObject jsonObject : contents) {
+            Content content = ContentFactory.create(jsonObject);
+            convertedContents.add(content);
+        }
+
+        return convertedContents;
     }
 }

@@ -7,7 +7,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.user.auth.UserNotFoundException;
 import shop.dalda.exception.order.OrderNotBelongToUserException;
-import shop.dalda.exception.template.OrderNotFoundException;
+import shop.dalda.exception.order.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
 import shop.dalda.order.domain.Answer;
 import shop.dalda.order.domain.Order;

@@ -1,15 +1,13 @@
-package shop.dalda.exception.template;
-
+package shop.dalda.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class OrderNotFoundException extends RuntimeException {
-
+public class UnknownFormatRequestException extends RuntimeException {
     private final String ERROR_CODE = "T002";
     private final HttpStatus HTTP_STATUS = HttpStatus.BAD_REQUEST;
-    private static final String MESSAGE = "템플릿을 찾을 수 없습니다.";
+    private static final String MESSAGE = "유효하지 않은 타입의 문항입니다.";
 
-    public OrderNotFoundException() {
+    public UnknownFormatRequestException() {
         super(MESSAGE);
     }
 
@@ -21,4 +19,3 @@ public class OrderNotFoundException extends RuntimeException {
         return HTTP_STATUS;
     }
 }
-

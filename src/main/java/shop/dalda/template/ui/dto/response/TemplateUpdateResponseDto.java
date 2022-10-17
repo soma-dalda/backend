@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.json.simple.JSONArray;
+import shop.dalda.template.domain.content.Content;
+
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -25,23 +27,6 @@ public class TemplateUpdateResponseDto {
     private String title;
 
     @Getter
-    @Schema(description = "수정된 템플릿 내용 (Json 형식)", example = "[\n" +
-            "        {\n" +
-            "            \"img\": \"...\",\n" +
-            "            \"question\": \"postTest\",\n" +
-            "            \"type\": \"shortsubjective\",\n" +
-            "            \"required\": true\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"img\": \"...\",\n" +
-            "            \"question\": \"케이크 사이즈를 골라주세요\",\n" +
-            "            \"options\": [\n" +
-            "                \"112233\",\n" +
-            "                \"1234\"\n" +
-            "            ],\n" +
-            "            \"type\": \"objective\",\n" +
-            "            \"required\": true\n" +
-            "        }\n" +
-            "    ]")
-    private JSONArray content;
+    @Schema(description = "수정된 템플릿 내용", example = "[{\"type\":\"shortsubjective\",\"required\":true,\"question\":\"등록하기\",\"img\":\"...\"},{\"type\":\"objective\",\"required\":true,\"question\":\"케이크 사이즈를 골라주세요\",\"img\":\"...\",\"options\":[\"123\", \"111\"]}]")
+    private List<Content> contentList;
 }
