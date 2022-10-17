@@ -36,7 +36,7 @@ public class UserCompanyController {
     @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping()
     public void updateCompany(HttpServletRequest request,
-                              UserCompanyRequest requestDto,
+                              @RequestBody UserCompanyRequest requestDto,
                               @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.saveOrUpdateCompany(currentUser, requestDto);
