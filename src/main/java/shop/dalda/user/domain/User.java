@@ -40,7 +40,6 @@ public class User extends BaseTimeEntity{
 
     private String username;
 
-    @Column(length = 11)
     private String userPhone;
 
     //업체정보

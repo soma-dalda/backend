@@ -15,6 +15,7 @@ import shop.dalda.user.ui.dto.UserProfileImageRequest;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Tag(name = "UserController")
 @RequestMapping("/api/user")
@@ -38,7 +39,7 @@ public class UserController {
     @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping()
     public void updateUser(HttpServletRequest request,
-                           @RequestBody UserUpdateRequest requestDto,
+                           @Valid @RequestBody UserUpdateRequest requestDto,
                            @AuthenticationPrincipal CustomOAuth2User currentUser) {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.updateUser(currentUser, requestDto);

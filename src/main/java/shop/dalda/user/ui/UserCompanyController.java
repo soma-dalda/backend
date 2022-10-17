@@ -18,6 +18,7 @@ import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.user.ui.dto.UserCompanyResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Tag(name = "UserCompanyController")
@@ -36,7 +37,7 @@ public class UserCompanyController {
     @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping()
     public void updateCompany(HttpServletRequest request,
-                              @RequestBody UserCompanyRequest requestDto,
+                              @Valid @RequestBody UserCompanyRequest requestDto,
                               @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.saveOrUpdateCompany(currentUser, requestDto);
