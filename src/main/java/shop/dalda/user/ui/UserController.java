@@ -28,7 +28,7 @@ public class UserController {
     private final UserService userService;
     private final UserAuthService userAuthService;
 
-    @Operation(summary = "유저정보 조회", description = "Request에 필요한 유저정보 반환")
+    @Operation(summary = "유저정보 조회", description = "유저정보 반환")
     @GetMapping()
     public ResponseEntity<UserAuthResponse> getUserAuth(HttpServletRequest request,
                                                         @AuthenticationPrincipal CustomOAuth2User currentUser) {
@@ -42,7 +42,7 @@ public class UserController {
     @PatchMapping()
     public void updateUser(HttpServletRequest request,
                            UserUpdateRequest requestDto,
-                           @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
+                           @AuthenticationPrincipal CustomOAuth2User currentUser) {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.updateUser(currentUser, requestDto);
     }
@@ -52,7 +52,7 @@ public class UserController {
     @PatchMapping("/profile")
     public void updateProfileImage(HttpServletRequest request,
                                    UserProfileImageRequest requestDto,
-                                   @AuthenticationPrincipal CustomOAuth2User currentUser) throws Exception {
+                                   @AuthenticationPrincipal CustomOAuth2User currentUser) {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
         userService.updateUserProfileImage(currentUser, requestDto);
