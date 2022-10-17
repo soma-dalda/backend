@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.user.application.UserAuthService;
 import shop.dalda.user.application.UserService;
@@ -41,7 +38,7 @@ public class UserController {
     @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping()
     public void updateUser(HttpServletRequest request,
-                           UserUpdateRequest requestDto,
+                           @RequestBody UserUpdateRequest requestDto,
                            @AuthenticationPrincipal CustomOAuth2User currentUser) {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.updateUser(currentUser, requestDto);
@@ -51,7 +48,7 @@ public class UserController {
     @PreAuthorize("hasRole('MEMBER') or hasRole('COMPANY')")
     @PatchMapping("/profile")
     public void updateProfileImage(HttpServletRequest request,
-                                   UserProfileImageRequest requestDto,
+                                   @RequestBody UserProfileImageRequest requestDto,
                                    @AuthenticationPrincipal CustomOAuth2User currentUser) {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
 
