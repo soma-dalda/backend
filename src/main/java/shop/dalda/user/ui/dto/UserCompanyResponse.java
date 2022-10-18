@@ -9,16 +9,26 @@ import java.util.List;
 
 @Data
 public class UserCompanyResponse {
-    Long id;
-    String companyName;
-    String companyLocation;
-    String companyPhone;
-    String companyIntroduction;
-    List<BusinessHour> businessHours;
-    String profileImage;
-    String qnaLink;
-    String instaLink;
-    List<CompanyLink> etcLinks;
+
+    private Long id;
+
+    private String companyName;
+
+    private String companyLocation;
+
+    private String companyPhone;
+
+    private String companyIntroduction;
+
+    private List<BusinessHour> businessHours;
+
+    private String profileImage;
+
+    private String qnaLink;
+
+    private String instaLink;
+
+    private List<CompanyLink> etcLinks;
 
     @QueryProjection
     public UserCompanyResponse(Long id, String companyName, String companyLocation, String companyPhone, String companyIntroduction, List<BusinessHour> businessHours, String profileImage, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {

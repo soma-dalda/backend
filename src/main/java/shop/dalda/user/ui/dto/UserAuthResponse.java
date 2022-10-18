@@ -10,21 +10,32 @@ import java.util.List;
 
 @Data
 public class UserAuthResponse {
-    Long id;
-    String username;
-    String userPhone;
-    Role role;
-    String companyName;
-    String companyIntroduction;
-    String companyLocation;
-    String companyDomain;
-    List<BusinessHour> businessHours;
-    String qnaLink;
-    String instaLink;
-    List<CompanyLink> etcLinks;
+
+    private Long id;
+
+    private String username;
+
+    private String userPhone;
+
+    private Role role;
+
+    private String companyName;
+
+    private String companyIntroduction;
+
+    private String companyLocation;
+
+    private String companyDomain;
+
+    private List<BusinessHour> businessHours;
+
+    private String qnaLink;
+
+    private String instaLink;
+
+    private List<CompanyLink> etcLinks;
 
     @QueryProjection
-
     public UserAuthResponse(Long id, String username, String userPhone, Role role, String companyName, String companyIntroduction, String companyLocation, String companyDomain, List<BusinessHour> businessHours, String qnaLink, String instaLink, List<CompanyLink> etcLinks) {
         this.id = id;
         this.username = username;

@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserProfileImageRequest {
+
     @Schema(description = "이미지 url", defaultValue = "imageUrl")
-    String imageUrl;
+    private String imageUrl;
 }
