@@ -10,7 +10,7 @@ public class ContentFactory {
         String type = (String) jsonObject.get("type");
         if (Objects.equals(type, "singleObjective") || Objects.equals(type, "multiObjective"))
             return new ObjectiveContent(jsonObject);
-        else if (Objects.equals(type, "shortSubjective") || Objects.equals(type, "multiSubjective"))
+        else if (Objects.equals(type, "subjective"))
             return new SubjectiveContent(jsonObject);
         else
             throw new UnsupportedTypeContentException();
