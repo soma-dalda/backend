@@ -28,11 +28,10 @@ public abstract class Content {
 
     @Override
     public String toString() {
-        return "Content{" +
-                "type='" + type + '\'' +
-                ", question='" + question + '\'' +
-                ", required=" + required +
-                ", imageUrl='" + imageUrl + '\'' +
-                '}';
+        return "{" +
+                "\"type\": " + type + ", " +
+                "\"question\": " + question + ", " +
+                "\"required\": " + required + ", " +
+                "\"imageUrl\": " + imageUrl + ", ";
     }
 }
