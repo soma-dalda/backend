@@ -11,6 +11,7 @@ public abstract class Content {
     private String type;
     private String question;
     private boolean required;
+    private String imageUrl;
 
     public Content(JSONObject jsonObject) {
         try {
@@ -18,6 +19,7 @@ public abstract class Content {
             type = (String) jsonObject.get("type");
             question = (String) jsonObject.get("question");
             required = (boolean) jsonObject.getOrDefault("required", true);
+            imageUrl = (String) jsonObject.getOrDefault("required", null);
 
         } catch (NullPointerException e) {
             throw new TemplateInvalidException();
@@ -27,7 +29,9 @@ public abstract class Content {
     @Override
     public String toString() {
         return "{" +
+                "\"type\": " + type + ", " +
                 "\"question\": " + question + ", " +
-                "\"required\": " + required + ", ";
+                "\"required\": " + required + ", " +
+                "\"imageUrl\": " + imageUrl + ", ";
     }
 }
