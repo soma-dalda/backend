@@ -19,7 +19,7 @@ public abstract class Content {
             type = (String) jsonObject.get("type");
             question = (String) jsonObject.get("question");
             required = (boolean) jsonObject.getOrDefault("required", true);
-            imageUrl = (String) jsonObject.getOrDefault("required", null);
+            imageUrl = (String) jsonObject.get("imageUrl");
 
         } catch (NullPointerException e) {
             throw new TemplateInvalidException();
