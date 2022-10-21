@@ -134,7 +134,7 @@ public class OrderService {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
-        Long orderCount = orderRepository.countOrderByUserId(user);
+        int orderCount = orderRepository.countOrdersByCompanyOrConsumer(user, user);
 
         return OrderCountResponseDto.builder()
                 .orderCount(orderCount)
