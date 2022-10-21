@@ -5,20 +5,21 @@ import lombok.Setter;
 import org.json.simple.JSONObject;
 import shop.dalda.exception.template.TemplateInvalidException;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 @Getter
 @Setter
 public class ObjectiveContent extends Content {
-    private LinkedHashSet<String> options;
+    private List<String> options;
     private int numOfSelect;
 
     public ObjectiveContent(JSONObject jsonObject) {
         super(jsonObject);
         try {
             // 옵션 값들 중복 제거
-            options = new LinkedHashSet<>((List<String>) (jsonObject.get("options")));
+            options = new ArrayList<>(new LinkedHashSet<>((List<String>) (jsonObject.get("options"))));
             numOfSelect = (int) jsonObject.getOrDefault("numOfSelect", 1);
             options.forEach(v -> {
                 // 특수문자 제거 등 처리 필요
