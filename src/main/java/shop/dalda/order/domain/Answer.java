@@ -11,5 +11,5 @@ import java.util.LinkedHashSet;
 @Data
 public class Answer {
     String question;
-    LinkedHashSet<String> answers;
+    LinkedHashSet<String> answer;
 }
