@@ -1,11 +1,11 @@
 package shop.dalda.order.ui.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.json.simple.JSONArray;
+import lombok.*;
+import shop.dalda.order.domain.OrderStatus;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -29,5 +29,15 @@ public class OrderListForConsumerResponseDto {
             "            \"status_change_date\": \"2022-09-08T00:01:08\"\n" +
             "        }\n" +
             "    ]")
-    private JSONArray orderList;
+    @Singular("order")
+    private List<OrderForConsumer> orderList;
+
+    @Builder
+    public static class OrderForConsumer {
+        Long id;
+        Long companyId;
+        String companyName;
+        OrderStatus orderStatus;
+        LocalDateTime status_change_date;
+    }
 }

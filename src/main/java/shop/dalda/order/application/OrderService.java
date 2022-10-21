@@ -2,14 +2,11 @@ package shop.dalda.order.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 import shop.dalda.exception.user.auth.UserNotFoundException;
 import shop.dalda.exception.order.OrderNotBelongToUserException;
 import shop.dalda.exception.order.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
-import shop.dalda.order.domain.Answer;
 import shop.dalda.order.domain.Order;
 import shop.dalda.order.domain.OrderStatus;
 import shop.dalda.order.domain.repository.OrderRepository;
@@ -30,7 +27,6 @@ import shop.dalda.user.domain.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -58,16 +54,13 @@ public class OrderService {
         // 픽업 시간 객체 생성
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderRequestDto.getPickupDate());
 
-        // 답변 중복 검사
-        List<Answer> answerList = parseAnswer(orderRequestDto.getTemplateResponses());
-
         // Order 객체 생성
         Order order = Order.builder()
                 .company(company)
                 .consumer(consumer)
                 .template(template)
                 .image(orderRequestDto.getImage())
-                .templateResponses(answerList)
+                .templateResponses(orderRequestDto.getTemplateResponses())
                 .orderDate(LocalDateTime.now())
                 .pickupDate(pickupDateTime)
                 .pickupNoticePhone(orderRequestDto.getPickupNoticePhone())
@@ -105,18 +98,16 @@ public class OrderService {
 
         List<Order> orderList = orderRepository.findAllByCompany(company);
 
-        JSONArray OrderListForResponse = new JSONArray();
+        OrderListForCompanyResponseDto.OrderListForCompanyResponseDtoBuilder builder = OrderListForCompanyResponseDto.builder();
         for (Order order : orderList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", order.getId());
-            jsonObject.put("consumer", order.getConsumer().getId());
-            jsonObject.put("order_status", order.getOrderStatus());
-            OrderListForResponse.add(jsonObject);
+            builder = builder.order(OrderListForCompanyResponseDto.OrderForCompany.builder()
+                    .id(order.getId())
+                    .consumerId(order.getConsumer().getId())
+                    .orderStatus(order.getOrderStatus())
+                    .build());
         }
 
-        return OrderListForCompanyResponseDto.builder()
-                .orderList(OrderListForResponse)
-                .build();
+        return builder.build();
     }
 
     public OrderListForConsumerResponseDto selectOrderListForConsumer(CustomOAuth2User authUser) {
@@ -125,19 +116,18 @@ public class OrderService {
 
         List<Order> orderList = orderRepository.findAllByConsumer(consumer);
 
-        JSONArray OrderListForResponse = new JSONArray();
+        OrderListForConsumerResponseDto.OrderListForConsumerResponseDtoBuilder builder = OrderListForConsumerResponseDto.builder();
         for (Order order : orderList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", order.getId());
-            jsonObject.put("company", order.getCompany().getId());
-            jsonObject.put("order_status", order.getOrderStatus());
-            jsonObject.put("status_change_date", order.getStatusChangeDate());
-            OrderListForResponse.add(jsonObject);
+            builder = builder.order(OrderListForConsumerResponseDto.OrderForConsumer.builder()
+                    .id(order.getId())
+                    .companyId(order.getConsumer().getId())
+                    .companyName(order.getCompany().getCompanyName())
+                    .orderStatus(order.getOrderStatus())
+                    .status_change_date(order.getStatusChangeDate())
+                    .build());
         }
 
-        return OrderListForConsumerResponseDto.builder()
-                .orderList(OrderListForResponse)
-                .build();
+        return builder.build();
     }
 
     public OrderCountResponseDto countOrder(CustomOAuth2User authUser) {
@@ -166,27 +156,13 @@ public class OrderService {
         // 픽업 시간 객체 생성
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderUpdateRequestDto.getPickupDate());
 
-        // 답변 중복 검사
-        List<Answer> answerList = parseAnswer(orderUpdateRequestDto.getTemplateResponses());
-
         // Order update
         order.setImage(orderUpdateRequestDto.getImage());
-        order.setTemplateResponses(answerList);
+        order.setTemplateResponses(orderUpdateRequestDto.getTemplateResponses());
         order.setPickupDate(pickupDateTime);
         order.setPickupNoticePhone(orderUpdateRequestDto.getPickupNoticePhone());
         order.setOrderStatus(orderUpdateRequestDto.getOrderStatus());
 
         return OrderMapper.INSTANCE.orderToDto(order);
-    }
-
-    private List<Answer> parseAnswer(String answerString) {
-        List<Answer> answers = (AnswerConverter.convertToEntityAttribute(answerString));
-        for (Answer answer : answers) {
-            answer.setAnswer(answer.getAnswer().substring(2, answer.getAnswer().length() - 2));
-            String[] checkedAnswer = answer.getAnswer().split("', '");
-            answer.setAnswer(Arrays.toString(Arrays.stream(checkedAnswer).distinct().toArray(String[]::new)));
-        }
-
-        return answers;
     }
 }
