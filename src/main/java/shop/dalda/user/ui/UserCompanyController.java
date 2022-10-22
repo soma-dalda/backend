@@ -42,18 +42,4 @@ public class UserCompanyController {
         currentUser = userAuthService.getAuthenticationIsNull(request, currentUser);
         userService.saveOrUpdateCompany(currentUser, requestDto);
     }
-
-    @Operation(summary = "업체 조회", description = "도메인 이름으로 업체정보를 조회하는 메서드")
-    @GetMapping("/{companyDomain}")
-    public ResponseEntity<UserCompanyResponse> getCompanyPage(@Parameter(name = "companyDomain") @PathVariable String companyDomain) {
-        UserCompanyResponse response = userService.getCompanyPage(companyDomain);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @Operation(summary = "업체 리스트 조회", description = "최근 로그인 기준 업체 10개 조회")
-    @GetMapping()
-    public ResponseEntity<List<UserCompanyListResponse>> getCompanyList() {
-        List<UserCompanyListResponse> resultList = userService.getCompanyList();
-        return ResponseEntity.ok().body(resultList);
-    }
 }
