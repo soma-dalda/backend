@@ -54,6 +54,7 @@ public class User extends BaseTimeEntity{
 
     private String companyIntroduction;
 
+    @Column(length = 1000)
     private String profileImage;
 
     @Convert(converter = BusinessHourConverter.class)
