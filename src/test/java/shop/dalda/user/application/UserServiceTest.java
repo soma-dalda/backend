@@ -8,12 +8,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.security.auth.user.CustomOAuth2User;
+import shop.dalda.user.domain.BusinessHour;
+import shop.dalda.user.domain.CompanyLink;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 import shop.dalda.user.ui.dto.UserProfileImageRequest;
 import shop.dalda.user.ui.dto.UserUpdateRequest;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +46,7 @@ class UserServiceTest {
     @Transactional
     @Test
     @DisplayName("유저 정보 수정")
-    void update_user() throws Exception {
+    void update_user() {
         //given
         String afterName = "testUser2";
         String afterPhone = "01000000000";
@@ -59,7 +63,7 @@ class UserServiceTest {
     @Transactional
     @Test
     @DisplayName("유저 프로필 이미지 수정")
-    void update_user_profile() throws Exception {
+    void update_user_profile() {
         //given
         String afterProfileUrl = "afterUrl";
         UserProfileImageRequest requestDto = new UserProfileImageRequest();
@@ -81,17 +85,21 @@ class UserServiceTest {
         requestDto.setCompanyIntroduction("소개소개");
         requestDto.setCompanyPhone("02-1111-1111");
         requestDto.setCompanyLocation("서울 강남구");
-        requestDto.setBusinessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]");
+        List<BusinessHour> businessHourList = new ArrayList<>();
+        businessHourList.add(BusinessHour.builder().day("월").start("08:00").end("22:00").build());
+        businessHourList.add(BusinessHour.builder().day("화").start("08:00").end("22:00").build());
+        businessHourList.add(BusinessHour.builder().day("수").start("08:00").end("22:00").build());
+        requestDto.setBusinessHours(businessHourList);
         requestDto.setProfileImage("url");
         requestDto.setQnaLink("qnaLink");
         requestDto.setInstaLink("instaLink");
-        requestDto.setEtcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]");
+        List<CompanyLink> companyLinks = new ArrayList<>();
+        companyLinks.add(new CompanyLink("url1","url"));
+        companyLinks.add(new CompanyLink("url2","url"));
+        requestDto.setEtcLinks(companyLinks);
         //when
         userService.saveOrUpdateCompany(currentUser, requestDto);
         //then
-        System.out.println(requestDto);
         assertThat(user.getCompanyName()).isEqualTo("업체명");
         assertThat(user.getCompanyIntroduction()).isEqualTo("소개소개");
     }

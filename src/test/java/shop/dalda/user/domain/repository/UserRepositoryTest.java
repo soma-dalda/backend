@@ -10,11 +10,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.user.domain.BusinessHour;
+import shop.dalda.user.domain.CompanyLink;
 import shop.dalda.user.domain.User;
 import shop.dalda.user.ui.dto.UserAuthResponse;
 import shop.dalda.user.ui.dto.UserCompanyRequest;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ActiveProfiles("dev")
@@ -38,13 +41,18 @@ class UserRepositoryTest {
         companySet.setCompanyIntroduction("소개소개");
         companySet.setCompanyPhone("02-1111-1111");
         companySet.setCompanyLocation("서울 강남구");
-        companySet.setBusinessHours("[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
-                "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]");
+        List<BusinessHour> businessHourList = new ArrayList<>();
+        businessHourList.add(BusinessHour.builder().day("월").start("08:00").end("22:00").build());
+        businessHourList.add(BusinessHour.builder().day("화").start("08:00").end("22:00").build());
+        businessHourList.add(BusinessHour.builder().day("수").start("08:00").end("22:00").build());
+        companySet.setBusinessHours(businessHourList);
         companySet.setProfileImage("url");
         companySet.setQnaLink("qnaLink");
         companySet.setInstaLink("instaLink");
-        companySet.setEtcLinks("[{\"url\":\"url1\"},{\"url\":\"url3\"},{\"url\":\"url3\"}]");
+        List<CompanyLink> companyLinks = new ArrayList<>();
+        companyLinks.add(new CompanyLink("url1","url"));
+        companyLinks.add(new CompanyLink("url2","url"));
+        companySet.setEtcLinks(companyLinks);
         user.setCompany(companySet);
         em.persist(user);
     }
