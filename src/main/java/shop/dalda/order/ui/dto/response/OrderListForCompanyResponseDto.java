@@ -1,11 +1,10 @@
 package shop.dalda.order.ui.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.json.simple.JSONArray;
+import lombok.*;
+import shop.dalda.order.domain.OrderStatus;
+
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -27,5 +26,14 @@ public class OrderListForCompanyResponseDto {
             "            \"order_status\": \"BEFORE_ACCEPT\"\n" +
             "        }\n" +
             "    ]")
-    private JSONArray orderList;
+    @Singular("order")
+    private List<OrderForCompany> orderList;
+
+    @Builder
+    public static class OrderForCompany {
+        Long id;
+        Long consumerId;
+        String consumerName;
+        OrderStatus orderStatus;
+    }
 }

@@ -2,6 +2,9 @@ package shop.dalda.order.ui.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import shop.dalda.order.domain.Answer;
+
+import java.util.List;
 
 public class OrderRequestDto {
 
@@ -19,7 +22,7 @@ public class OrderRequestDto {
 
     @Getter
     @Schema(description = "템플릿에 대한 구매자의 답변의 리스트 형태의 문자열", defaultValue = "[{\"question\": \"test\", \"answer\": \"['1', '2']\"}]")
-    private String templateResponses;
+    private List<Answer> templateResponses;
 
     @Getter
     @Schema(description = "구매자가 설정한 픽업 일시를 정수형태로 가지는 정수형 배열", defaultValue = "2022-08-25T12:00:00")

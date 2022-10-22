@@ -21,7 +21,7 @@ public class S3UploadController {
 
     @Operation(summary = "이미지 업로드", description = "이미지 등록을 요청하면 S3에 이미지를 등록 후 그에 해당하는 url 반환하는 메서드")
     @PostMapping("/upload")
-    public ResponseEntity<S3ResponseDto> uploadFile(@Parameter(description = "업로드할 이미지 파일") @RequestParam("image") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<S3ResponseDto> uploadFile(@Parameter(description = "업로드할 이미지 파일") @RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadUrl = s3UploadService.upload(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), multipartFile.getSize());
         S3ResponseDto s3ResponseDto = S3ResponseDto.builder().url(uploadUrl).build();
 

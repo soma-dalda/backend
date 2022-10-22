@@ -58,7 +58,7 @@ public class OrderController {
 
     // 주문 목록 조회 - 구매자
     @Operation(summary = "주문 목록 조회 - 구매자", description = "구매자가 현재 자신이 진행 중인 주문의 목록을 조회하는 메서드")
-    @GetMapping("/list/consumer/{user_id}")
+    @GetMapping("/list/consumer")
     public ResponseEntity<OrderListForConsumerResponseDto> selectOrderListForConsumer(@Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
         OrderListForConsumerResponseDto OrderListForConsumerResponseDto = orderService.selectOrderListForConsumer(authUser);
         return ResponseEntity.ok(OrderListForConsumerResponseDto);
