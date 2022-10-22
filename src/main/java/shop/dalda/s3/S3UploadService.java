@@ -29,6 +29,6 @@ public class S3UploadService {
 
         s3Client.putObject(bucket, dirOriginal + s3FileName, inputStream, objMeta);
 
-        return s3Client.getUrl(bucket, dirOriginal + s3FileName).toString();
+        return s3Client.getResourceUrl(bucket, dirOriginal + s3FileName);
     }
 }
