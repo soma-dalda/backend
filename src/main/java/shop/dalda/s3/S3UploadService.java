@@ -19,6 +19,9 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.dirOriginal}")
     private String dirOriginal;
 
+    @Value("${cloud.aws.s3.cloudFront}")
+    private String cloudFront;
+
     private final AmazonS3Client s3Client;
 
     public String upload(InputStream inputStream, String originFileName, Long fileSize) {
@@ -29,6 +32,6 @@ public class S3UploadService {
 
         s3Client.putObject(bucket, dirOriginal + s3FileName, inputStream, objMeta);
 
-        return s3Client.getResourceUrl(bucket, dirOriginal + s3FileName);
+        return cloudFront + dirOriginal + s3FileName;
     }
 }
