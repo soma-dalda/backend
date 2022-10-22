@@ -1,15 +1,11 @@
 package shop.dalda.user.ui.dto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import shop.dalda.user.domain.BusinessHour;
 import shop.dalda.user.domain.CompanyLink;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -32,7 +28,7 @@ public class UserCompanyRequest {
     @Schema(description = "영업시간", defaultValue = "[{\"day\":\"월\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
             "{\"day\":\"화\",\"start\":\"08:00\",\"end\":\"22:00\"}," +
             "{\"day\":\"수\",\"start\":\"08:00\",\"end\":\"24:00\"}]")
-    private String businessHours;
+    private List<BusinessHour> businessHours;
 
     @Schema(description = "업체 연락처", defaultValue = "020000000")
     private String companyPhone;
@@ -49,16 +45,6 @@ public class UserCompanyRequest {
     @Schema(description = "기타 링크", defaultValue = "[{\"title\":\"title1\",\"url\":\"url1\"}," +
             "{\"title\":\"title2\",\"url\":\"url2\"}," +
             "{\"title\":\"title3\",\"url\":\"url3\"}]")
-    private String etcLinks;
-
-    public List<CompanyLink> parsedEtcLinks() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(etcLinks, new TypeReference<>() {});
-    }
-
-    public List<BusinessHour> parsedBusinessHours() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(businessHours, new TypeReference<>() {});
-    }
+    private List<CompanyLink> etcLinks;
 
 }

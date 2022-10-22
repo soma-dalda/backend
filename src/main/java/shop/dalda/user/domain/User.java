@@ -91,12 +91,12 @@ public class User extends BaseTimeEntity{
         this.companyDomain = requestDto.getCompanyDomain();
         this.companyLocation = requestDto.getCompanyLocation();
         this.companyIntroduction = requestDto.getCompanyIntroduction();
-        this.businessHours = requestDto.parsedBusinessHours();
+        this.businessHours = requestDto.getBusinessHours();
         this.companyPhone = requestDto.getCompanyPhone();
         this.profileImage = requestDto.getProfileImage();
         this.qnaLink = requestDto.getQnaLink();
         this.instaLink = requestDto.getInstaLink();
-        this.etcLinks = requestDto.parsedEtcLinks();
+        this.etcLinks = requestDto.getEtcLinks();
         this.role = Role.ROLE_COMPANY;
     }
 
