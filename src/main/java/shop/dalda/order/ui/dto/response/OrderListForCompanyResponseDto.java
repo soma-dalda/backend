@@ -6,12 +6,12 @@ import shop.dalda.order.domain.OrderStatus;
 
 import java.util.List;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderListForCompanyResponseDto {
 
-    @Getter
     @Schema(description = "해당 업체가 진행 중인 주문의 목록(주문 id, 구매자 id, 구매자 닉네임, 진행 상태)", example = "[\n" +
             "        {\n" +
             "            \"id\": 1,\n" +
@@ -29,6 +29,7 @@ public class OrderListForCompanyResponseDto {
     @Singular("order")
     private List<OrderForCompany> orderList;
 
+    @Getter
     @Builder
     public static class OrderForCompany {
         Long id;

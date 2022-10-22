@@ -34,7 +34,7 @@ public class Order {
     @JoinColumn(name = "template_id")
     private Template template;
 
-    @Column(name = "img_url")
+    @Column(name = "img_url", length = 1000)
     private String image;
 
     @Convert(converter = AnswerConverter.class)

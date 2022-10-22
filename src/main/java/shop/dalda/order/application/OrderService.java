@@ -39,8 +39,6 @@ public class OrderService {
     private final TemplateRepository templateRepository;
     private final OrderRepository orderRepository;
 
-    private final AnswerConverter AnswerConverter = new AnswerConverter();
-
     public Long requestOrder(OrderRequestDto orderRequestDto,
                              CustomOAuth2User authUser) {
         // User, Template 객체 생성
