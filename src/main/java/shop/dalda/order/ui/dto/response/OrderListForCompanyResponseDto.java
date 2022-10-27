@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import shop.dalda.order.domain.OrderStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,14 +17,18 @@ public class OrderListForCompanyResponseDto {
             "        {\n" +
             "            \"id\": 1,\n" +
             "            \"consumerId\": 1,\n" +
-            "            \"consumerName\": \"woongsung\",\n" +
-            "            \"order_status\": \"BEFORE_ACCEPT\"\n" +
+            "            \"consumerName\": woongsung,\n" +
+            "            \"orderDate\": 2022-08-25T12:00:00,\n" +
+            "            \"orderStatus\": \"BEFORE_ACCEPT\"\n" +
+            "            \"statusChangeDate\": \"2022-08-25T12:00:00\"\n" +
             "        },\n" +
             "        {\n" +
             "            \"id\": 2,\n" +
-            "            \"consumer\": 1,\n" +
-            "            \"username\": \"woongsung\",\n" +
-            "            \"order_status\": \"BEFORE_ACCEPT\"\n" +
+            "            \"consumerId\": 1,\n" +
+            "            \"consumerName\": woongsung,\n" +
+            "            \"orderDate\": 2022-08-25T12:00:00,\n" +
+            "            \"orderStatus\": \"BEFORE_ACCEPT\"\n" +
+            "            \"statusChangeDate\": \"2022-08-25T12:00:00\"\n" +
             "        }\n" +
             "    ]")
     @Singular("order")
@@ -35,6 +40,8 @@ public class OrderListForCompanyResponseDto {
         Long id;
         Long consumerId;
         String consumerName;
+        LocalDateTime orderDate;
         OrderStatus orderStatus;
+        LocalDateTime statusChangeDate;
     }
 }

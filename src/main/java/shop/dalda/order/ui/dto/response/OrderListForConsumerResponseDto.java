@@ -18,16 +18,18 @@ public class OrderListForConsumerResponseDto {
             "        {\n" +
             "            \"id\": 1,\n" +
             "            \"companyId\": 1,\n" +
-            "            \"Companyname\": \"dalda\",\n" +
-            "            \"order_status\": \"BEFORE_ACCEPT\",\n" +
-            "            \"status_change_date\": \"2022-09-07T23:44:44\"\n" +
+            "            \"CompanyName\": \"dalda\",\n" +
+            "            \"orderDate\": \"2022-09-07T23:44:44\"\n" +
+            "            \"orderStatus\": \"BEFORE_ACCEPT\",\n" +
+            "            \"statusChangeDate\": \"2022-09-07T23:44:44\"\n" +
             "        },\n" +
             "        {\n" +
             "            \"id\": 2,\n" +
             "            \"companyId\": 1,\n" +
-            "            \"Companyname\": \"dalda\",\n" +
-            "            \"order_status\": \"BEFORE_ACCEPT\",\n" +
-            "            \"status_change_date\": \"2022-09-08T00:01:08\"\n" +
+            "            \"CompanyName\": \"dalda\",\n" +
+            "            \"orderDate\": \"2022-09-07T23:44:44\"\n" +
+            "            \"orderStatus\": \"BEFORE_ACCEPT\",\n" +
+            "            \"statusChangeDate\": \"2022-09-07T23:44:44\"\n" +
             "        }\n" +
             "    ]")
     @Singular("order")
@@ -35,11 +37,12 @@ public class OrderListForConsumerResponseDto {
 
     @Getter
     @Builder
-    public static class OrderForConsumer implements Serializable {
+    public static class OrderForConsumer {
         Long id;
         Long companyId;
         String companyName;
+        LocalDateTime orderDate;
         OrderStatus orderStatus;
-        LocalDateTime status_change_date;
+        LocalDateTime statusChangeDate;
     }
 }

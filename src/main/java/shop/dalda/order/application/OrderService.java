@@ -101,7 +101,10 @@ public class OrderService {
             builder = builder.order(OrderListForCompanyResponseDto.OrderForCompany.builder()
                     .id(order.getId())
                     .consumerId(order.getConsumer().getId())
+                    .consumerName(order.getConsumer().getUsername())
+                    .orderDate(order.getOrderDate())
                     .orderStatus(order.getOrderStatus())
+                    .statusChangeDate(order.getStatusChangeDate())
                     .build());
         }
 
@@ -120,8 +123,9 @@ public class OrderService {
                     .id(order.getId())
                     .companyId(order.getConsumer().getId())
                     .companyName(order.getCompany().getCompanyName())
+                    .orderDate(order.getOrderDate())
                     .orderStatus(order.getOrderStatus())
-                    .status_change_date(order.getStatusChangeDate())
+                    .statusChangeDate(order.getStatusChangeDate())
                     .build());
         }
 
