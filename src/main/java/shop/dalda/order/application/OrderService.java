@@ -3,21 +3,22 @@ package shop.dalda.order.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import shop.dalda.exception.user.auth.UserNotFoundException;
 import shop.dalda.exception.order.OrderNotBelongToUserException;
 import shop.dalda.exception.order.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
+import shop.dalda.exception.user.auth.UserNotFoundException;
 import shop.dalda.order.domain.Order;
 import shop.dalda.order.domain.OrderStatus;
 import shop.dalda.order.domain.repository.OrderRepository;
-import shop.dalda.order.ui.dto.request.OrderUpdateRequestDto;
-import shop.dalda.order.ui.dto.response.OrderUpdateResponseDto;
 import shop.dalda.order.ui.dto.request.OrderRequestDto;
+import shop.dalda.order.ui.dto.request.OrderUpdateRequestDto;
 import shop.dalda.order.ui.dto.response.OrderCountResponseDto;
 import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForCompanyResponseDto.OrderForCompany;
 import shop.dalda.order.ui.dto.response.OrderListForConsumerResponseDto;
+import shop.dalda.order.ui.dto.response.OrderListForConsumerResponseDto.OrderForConsumer;
 import shop.dalda.order.ui.dto.response.OrderResponseDto;
-import shop.dalda.order.ui.mapper.AnswerConverter;
+import shop.dalda.order.ui.dto.response.OrderUpdateResponseDto;
 import shop.dalda.order.ui.mapper.OrderMapper;
 import shop.dalda.security.auth.user.CustomOAuth2User;
 import shop.dalda.template.domain.Template;
@@ -51,6 +52,11 @@ public class OrderService {
 
         // 픽업 시간 객체 생성
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderRequestDto.getPickupDate());
+
+        // 답변 유효 검사
+        for (int i = 0; i < template.getContentList().size(); i++) {
+            template.getContentList().get(i).checkAnswer(orderRequestDto.getTemplateResponses().get(i));
+        }
 
         // Order 객체 생성
         Order order = Order.builder()
@@ -98,7 +104,7 @@ public class OrderService {
 
         OrderListForCompanyResponseDto.OrderListForCompanyResponseDtoBuilder builder = OrderListForCompanyResponseDto.builder();
         for (Order order : orderList) {
-            builder = builder.order(OrderListForCompanyResponseDto.OrderForCompany.builder()
+            builder = builder.order(OrderForCompany.builder()
                     .id(order.getId())
                     .consumerId(order.getConsumer().getId())
                     .consumerName(order.getConsumer().getUsername())
@@ -119,7 +125,7 @@ public class OrderService {
 
         OrderListForConsumerResponseDto.OrderListForConsumerResponseDtoBuilder builder = OrderListForConsumerResponseDto.builder();
         for (Order order : orderList) {
-            builder = builder.order(OrderListForConsumerResponseDto.OrderForConsumer.builder()
+            builder = builder.order(OrderForConsumer.builder()
                     .id(order.getId())
                     .companyId(order.getConsumer().getId())
                     .companyName(order.getCompany().getCompanyName())
@@ -157,6 +163,11 @@ public class OrderService {
 
         // 픽업 시간 객체 생성
         LocalDateTime pickupDateTime = LocalDateTime.parse(orderUpdateRequestDto.getPickupDate());
+
+        // 답변 유효 검사
+        for (int i = 0; i < order.getTemplate().getContentList().size(); i++) {
+            order.getTemplate().getContentList().get(i).checkAnswer(orderUpdateRequestDto.getTemplateResponses().get(i));
+        }
 
         // Order update
         order.setImage(orderUpdateRequestDto.getImage());

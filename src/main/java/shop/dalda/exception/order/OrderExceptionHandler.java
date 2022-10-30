@@ -28,4 +28,20 @@ public class OrderExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .body(e.getMessage());
     }
+
+    @ExceptionHandler(RequiredQuestionException.class)
+    public ResponseEntity<String> RequiredQuestionException(RequiredQuestionException e) {
+        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getErrorCode(), e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST.value())
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidAnswerException.class)
+    public ResponseEntity<String> InvalidAnswerException(InvalidAnswerException e) {
+        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getErrorCode(), e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST.value())
+                .body(e.getMessage());
+    }
 }
