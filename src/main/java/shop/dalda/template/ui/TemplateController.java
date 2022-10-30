@@ -32,7 +32,7 @@ public class TemplateController {
     @Operation(summary = "템플릿 등록", description = "업체에서 주문을 받을 템플릿을 등록하는 메서드")
     @PostMapping("")
     public ResponseEntity<Void> insertTemplate(@Parameter @RequestBody TemplateRequestDto templateRequestDto,
-                                               @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) throws ParseException {
+                                               @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
         Long templateId = templateService.insertTemplate(templateRequestDto, authUser);
         String redirectUrl = String.format(REDIRECT_URL, templateId);
         return ResponseEntity.created(URI.create(redirectUrl)).build();
@@ -41,7 +41,7 @@ public class TemplateController {
     // 템플릿 조회
     @Operation(summary = "템플릿 조회", description = "템플릿을 선택한 경우 해당 템플릿의 내용을 조회하는 메서드")
     @GetMapping("/{template_id}")
-    public ResponseEntity<TemplateResponseDto> selectTemplate(@Parameter(description = "조회할 템플릿의 id") @PathVariable(name = "template_id") Long templateId) throws ParseException {
+    public ResponseEntity<TemplateResponseDto> selectTemplate(@Parameter(description = "조회할 템플릿의 id") @PathVariable(name = "template_id") Long templateId) {
         TemplateResponseDto templateResponseDto = templateService.selectTemplate(templateId);
         return ResponseEntity.ok(templateResponseDto);
     }
@@ -60,7 +60,7 @@ public class TemplateController {
     public ResponseEntity<TemplateUpdateResponseDto> updateTemplate(
             @Parameter(description = "수정할 템플릿의 id") @PathVariable(name = "template_id") Long templateId,
             @Parameter @RequestBody TemplateUpdateRequestDto templateUpdateRequestDto,
-            @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) throws ParseException {
+            @Parameter(hidden = true) @AuthenticationPrincipal CustomOAuth2User authUser) {
         TemplateUpdateResponseDto templateUpdateResponseDto = templateService.updateTemplate(templateId, templateUpdateRequestDto, authUser);
         URI redirectUrl = URI.create(String.format(REDIRECT_URL, templateId));
         return ResponseEntity.created(redirectUrl).body(templateUpdateResponseDto);

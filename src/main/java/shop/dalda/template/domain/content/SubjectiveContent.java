@@ -1,17 +1,37 @@
 package shop.dalda.template.domain.content;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.json.simple.JSONObject;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import shop.dalda.exception.template.TemplateInvalidException;
+import shop.dalda.global.SQLInjectionChecker;
+import shop.dalda.order.domain.Answer;
 
 @Getter
-@Setter
+@SuperBuilder
+@NoArgsConstructor
 public class SubjectiveContent extends Content {
-    private int typingLimit;
+    private int typingLimit = 100;
 
-    public SubjectiveContent(JSONObject jsonObject) {
-        super(jsonObject);
-        typingLimit = (int) jsonObject.getOrDefault("typingLimit", 100);
+    @Override
+    void checkDetail() {
+        // 글자 수 제한이 너무 큰지
+        if (typingLimit > 1000) {
+            throw new TemplateInvalidException();
+        }
+    }
+
+    @Override
+    boolean checkDetailAnswer(Answer answer) {
+        // 제한 글자 수 내로 작성했는지
+        if (answer.getAnswer().size() > typingLimit) {
+            return false;
+        }
+
+        // SQL Injection 처리
+        answer.getAnswer().set(0, SQLInjectionChecker.checkSQLInjection(answer.getAnswer().get(0)));
+
+        return true;
     }
 
     @Override

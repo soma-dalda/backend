@@ -1,33 +1,48 @@
 package shop.dalda.template.domain.content;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.json.simple.JSONObject;
-import shop.dalda.exception.template.TemplateInvalidException;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
+import shop.dalda.global.SQLInjectionChecker;
+import shop.dalda.order.domain.Answer;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
-@Setter
+@SuperBuilder
+@NoArgsConstructor
 public class ObjectiveContent extends Content {
     private List<String> options;
-    private int numOfSelect;
+    private int numOfSelect = 1;
 
-    public ObjectiveContent(JSONObject jsonObject) {
-        super(jsonObject);
-        try {
-            // 옵션 값들 중복 제거
-            options = new ArrayList<>(new LinkedHashSet<>((List<String>) (jsonObject.get("options"))));
-            numOfSelect = (int) jsonObject.getOrDefault("numOfSelect", 1);
-            options.forEach(v -> {
-                // 특수문자 제거 등 처리 필요
+    @Override
+    void checkDetail() {
+        // 중복 제거
+        options = options.stream().distinct().collect(Collectors.toList());
 
-            });
-        } catch (NullPointerException e) {
-            throw new TemplateInvalidException();
+        // SQL Injection 처리
+        for (int i = 0; i < options.size(); i++) {
+            options.set(i, SQLInjectionChecker.checkSQLInjection(options.get(i)));
         }
+    }
+
+    @Override
+    boolean checkDetailAnswer(Answer answer) {
+        // 중복 제거
+        answer.setAnswer(answer.getAnswer().stream().distinct().collect(Collectors.toList()));
+
+        // template에 있는 값인지
+        for (String s : answer.getAnswer()) {
+            if (!options.contains(s)) {
+                return false;
+            }
+        }
+
+        // 선택 개수만큼 선택했는지
+        return answer.getAnswer().size() <= numOfSelect;
     }
 
     @Override

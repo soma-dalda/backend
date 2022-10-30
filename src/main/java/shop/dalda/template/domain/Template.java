@@ -2,6 +2,7 @@ package shop.dalda.template.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.dalda.template.domain.content.Content;
 import shop.dalda.template.domain.converter.JPAJsonConverter;
@@ -11,6 +12,7 @@ import shop.dalda.user.domain.User;
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,32 +32,15 @@ public class Template extends BaseTimeEntity {
     private String title;
 
     @Convert(converter = JPAJsonConverter.class)
-    @Column(columnDefinition = "json")
-    private List<Content> content;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public List<Content> getContent() {
-        return content;
-    }
+    @Column(columnDefinition = "json", name = "content")
+    private List<Content> contentList;
 
     public void updateTitle(String title) {
         this.title = title;
     }
 
-    public void updateContent(List<Content> content) {
-        this.content = content;
+    public void updateContent(List<Content> contentList) {
+        this.contentList = contentList;
     }
 
     @Override
@@ -63,7 +48,7 @@ public class Template extends BaseTimeEntity {
         return "Template{" +
                 "id=" + id +
                 ", user=" + user +
-                ", content='" + content + '\'' +
+                ", contentList='" + contentList + '\'' +
                 '}';
     }
 }
