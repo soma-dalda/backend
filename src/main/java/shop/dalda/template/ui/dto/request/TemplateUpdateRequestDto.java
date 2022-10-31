@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.dalda.template.domain.content.Content;
+import shop.dalda.content.domain.Content;
 
 import java.util.List;
 

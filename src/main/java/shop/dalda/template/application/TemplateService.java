@@ -3,10 +3,10 @@ package shop.dalda.template.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import shop.dalda.content.application.ContentServiceFactory;
 import shop.dalda.exception.template.TemplateNotBelongToUserException;
 import shop.dalda.exception.template.TemplateNotFoundException;
 import shop.dalda.security.auth.user.CustomOAuth2User;
-import shop.dalda.template.domain.content.Content;
 import shop.dalda.template.domain.Template;
 import shop.dalda.template.domain.mapper.TemplateInfoMapping;
 import shop.dalda.template.domain.mapper.TemplateMapper;
@@ -41,8 +41,9 @@ public class TemplateService {
         User user = userRepository.findById(authUser.getId())
                 .orElseThrow(UserNotFoundException::new);
 
-        //각 질문을 Content 객체로 변환
-        templateRequestDto.getContentList().forEach(Content::checkValidation);
+        //각 Content 유효성 검사
+        templateRequestDto.getContentList().forEach(content ->
+                ContentServiceFactory.contentServiceFactory(content).checkValidation(content));
 
         // Template 객체 생성
         Template template = Template.builder()
@@ -105,6 +106,10 @@ public class TemplateService {
         if (!template.getUser().equals(user)) {
             throw new TemplateNotBelongToUserException();
         }
+
+        //각 Content 유효성 검사
+        templateUpdateRequestDto.getContentList().forEach(content ->
+                ContentServiceFactory.contentServiceFactory(content).checkValidation(content));
 
         // template 수정
         template.updateTitle(templateUpdateRequestDto.getTitle());

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import shop.dalda.order.domain.OrderStatus;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 

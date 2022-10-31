@@ -3,6 +3,7 @@ package shop.dalda.order.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import shop.dalda.content.application.ContentServiceFactory;
 import shop.dalda.exception.order.OrderNotBelongToUserException;
 import shop.dalda.exception.order.OrderNotFoundException;
 import shop.dalda.exception.template.TemplateNotFoundException;
@@ -55,7 +56,8 @@ public class OrderService {
 
         // 답변 유효 검사
         for (int i = 0; i < template.getContentList().size(); i++) {
-            template.getContentList().get(i).checkAnswer(orderRequestDto.getTemplateResponses().get(i));
+            ContentServiceFactory.contentServiceFactory(template.getContentList().get(i))
+                    .checkAnswer(template.getContentList().get(i), orderRequestDto.getTemplateResponses().get(i));
         }
 
         // Order 객체 생성
@@ -166,7 +168,8 @@ public class OrderService {
 
         // 답변 유효 검사
         for (int i = 0; i < order.getTemplate().getContentList().size(); i++) {
-            order.getTemplate().getContentList().get(i).checkAnswer(orderUpdateRequestDto.getTemplateResponses().get(i));
+            ContentServiceFactory.contentServiceFactory(order.getTemplate().getContentList().get(i))
+                    .checkAnswer(order.getTemplate().getContentList().get(i), orderUpdateRequestDto.getTemplateResponses().get(i));
         }
 
         // Order update
