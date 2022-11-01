@@ -1,15 +1,15 @@
 package shop.dalda.order.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.util.LinkedHashSet;
+import java.util.List;
 
-@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 public class Answer {
     String question;
-    LinkedHashSet<String> answer;
+    List<String> answer;
 }

@@ -3,6 +3,7 @@ package shop.dalda.template.domain.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import shop.dalda.content.domain.Content;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -26,7 +27,7 @@ public class JPAJsonConverter implements AttributeConverter<List<?>, String> {
 
     //JSON to List
     @Override
-    public List<?> convertToEntityAttribute(String dbData) {
+    public List<Content> convertToEntityAttribute(String dbData) {
         try {
             return mapper.readValue(dbData, new TypeReference<>() {
             });

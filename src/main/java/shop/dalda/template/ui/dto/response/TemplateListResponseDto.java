@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.json.simple.JSONObject;
 
 import java.util.List;
 
@@ -29,5 +28,12 @@ public class TemplateListResponseDto {
             "            \"title\": \"기본 폼\"\n" +
             "        }\n" +
             "    ]")
-    private List<JSONObject> templateList;
+    private List<TemplateInfo> templateList;
+
+    @Getter
+    @Builder
+    public static class TemplateInfo {
+        private Long id;
+        private String title;
+    }
 }

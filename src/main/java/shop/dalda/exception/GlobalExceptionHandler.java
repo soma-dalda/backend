@@ -26,10 +26,18 @@ public class GlobalExceptionHandler {
                 .body(e.getMessage());
     }
 
+    @ExceptionHandler(SQLInjectionException.class)
+    public ResponseEntity<String> SQLInjectionException(SQLInjectionException e) {
+        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getErrorCode(), e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST.value())
+                .body(e.getMessage());
+    }
+
     // Validate Exception
     @ExceptionHandler()
     public ResponseEntity<ExceptionResponse> UnknownFormatRequestException(MethodArgumentNotValidException e) {
-        log.warn("Class: {}, Message: {}, BindingResult: {}",e.getClass().getSimpleName(), e.getMessage(), e.getBindingResult());
+        log.warn("Class: {}, Message: {}, BindingResult: {}", e.getClass().getSimpleName(), e.getMessage(), e.getBindingResult());
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         StringBuilder sb = new StringBuilder();
         for (FieldError fieldError : fieldErrors) {
