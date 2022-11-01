@@ -12,6 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class S3UploadService {
+    private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -22,15 +23,14 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.cloudFront}")
     private String cloudFront;
 
-    private final AmazonS3Client s3Client;
-
     public String upload(InputStream inputStream, String originFileName, Long fileSize) {
+
         String s3FileName = UUID.randomUUID() + "-" + originFileName;
 
         ObjectMetadata objMeta = new ObjectMetadata();
         objMeta.setContentLength(fileSize);
 
-        s3Client.putObject(bucket, dirOriginal + s3FileName, inputStream, objMeta);
+        amazonS3Client.putObject(bucket, dirOriginal + s3FileName, inputStream, objMeta);
 
         return cloudFront + dirOriginal + s3FileName;
     }
