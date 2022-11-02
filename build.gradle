@@ -39,15 +39,15 @@ dependencies {
 
 
     //redis
-    implementation 'org.springframework.data:spring-data-redis:2.7.2'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.3'
+    implementation 'org.springframework.data:spring-data-redis:2.7.5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.7.5'
 
     //jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     //swagger
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-    implementation 'org.springdoc:springdoc-openapi-security:1.6.11'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+    implementation 'org.springdoc:springdoc-openapi-security:1.6.12'
 
     //querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
@@ -60,8 +60,8 @@ dependencies {
     //lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
