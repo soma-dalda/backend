@@ -14,13 +14,13 @@ import java.util.UUID;
 public class S3UploadService {
     private final AmazonS3Client amazonS3Client;
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${s3.bucket.name}")
     private String bucket;
 
     @Value("${cloud.aws.s3.dirOriginal}")
     private String dirOriginal;
 
-    @Value("${cloud.aws.s3.cloudFront}")
+    @Value("${s3.cloudfront}")
     private String cloudFront;
 
     public String upload(InputStream inputStream, String originFileName, Long fileSize) {

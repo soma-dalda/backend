@@ -28,10 +28,9 @@ public class TokenProvider {
     private static final Logger log = LoggerFactory.getLogger(TokenProvider.class);
     private final RedisService redisService;
 
-    @Value("${app.auth.tokenExpiration}")
-    private long TOKEN_EXPIRATION;
+    private final long TOKEN_EXPIRATION = 1800000;
 
-    @Value("${app.auth.tokenSecret}")
+    @Value("${jwt.secret}")
     private String TOKEN_SECRET;
 
     public String createAccessToken(Authentication authentication, HttpServletResponse response) {

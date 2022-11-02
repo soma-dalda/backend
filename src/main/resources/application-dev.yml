@@ -55,13 +55,8 @@ spring:
 # AWS
 cloud:
   aws:
-    credentials:
-      accessKey: ${s3_deploy.access}
-      secretKey: ${s3_deploy.secret}
     s3:
-      bucket: ${s3.bukcet.name}
       dirOriginal: original/
-      cloudFront: ${s3.cloudfront}
     region:
       static: ap-northeast-2
     stack:
@@ -69,9 +64,6 @@ cloud:
 
 #JWT
 app:
-  auth:
-    tokenSecret: ${jwt.secret}
-    tokenExpiration: 1800000
   oauth2:
     defaultUri : "https://test.dalda.shop/"
     loginRedirectUri: "https://test.dalda.shop/login"
