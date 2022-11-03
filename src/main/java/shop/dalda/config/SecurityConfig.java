@@ -14,10 +14,7 @@ import shop.dalda.security.auth.LogoutSuccessHandler;
 import shop.dalda.security.auth.OAuth2AuthenticationFailureHandler;
 import shop.dalda.security.auth.OAuth2AuthenticationSuccessHandler;
 import shop.dalda.security.auth.user.CustomOAuth2UserService;
-import shop.dalda.security.jwt.JwtAccessDeniedHandler;
-import shop.dalda.security.jwt.JwtAuthenticationEntryPoint;
-import shop.dalda.security.jwt.JwtAuthenticationFilter;
-import shop.dalda.security.jwt.JwtExceptionFilter;
+import shop.dalda.security.jwt.*;
 
 
 @RequiredArgsConstructor
@@ -32,8 +29,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtExceptionFilter jwtExceptionFilter;
+    private final TokenProvider tokenProvider;
 
     private static final String[] ignores = {
             "/favicon.ico",
@@ -45,7 +41,8 @@ public class SecurityConfig {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            "/api/home/**"
+            "/api/home/**",
+            "/api/user-auth/**"
     };
 
     @Bean
@@ -81,8 +78,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler);
 
-        http.addFilterBefore(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class);
-        http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(tokenProvider), OAuth2LoginAuthenticationFilter.class);
+        http.addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
 
         return http.build();
     }
@@ -92,6 +89,7 @@ public class SecurityConfig {
     public SecurityFilterChain resources(HttpSecurity http) throws Exception {
         http.requestMatchers(matchers -> matchers.antMatchers(ignores))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .csrf().disable()
                 .requestCache().disable()
                 .securityContext().disable()
                 .sessionManagement().disable();
