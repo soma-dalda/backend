@@ -10,6 +10,7 @@ import shop.dalda.user.ui.dto.UserUpdateRequest;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class User extends BaseTimeEntity{
     @Column(columnDefinition = "json")
     private List<CompanyLink> etcLinks;
 
-    private LocalDate latestAt;
+    private LocalDateTime latestAt;
 
     private boolean withdraw;
 
@@ -80,11 +81,10 @@ public class User extends BaseTimeEntity{
         this.oauthId = oauthId;
         this.username = username;
         this.role = Role.ROLE_MEMBER;
-        this.latestAt = LocalDate.now();
     }
 
     public void setLatestAt() {
-        this.latestAt = LocalDate.now();
+        this.latestAt = LocalDateTime.now();
     }
 
     public void setCompany(UserCompanyRequest requestDto) throws JsonProcessingException {
