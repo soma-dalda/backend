@@ -42,9 +42,9 @@ public class UserCompanyRequest {
     @Schema(description = "인스타 링크", defaultValue = "인스타 링크")
     private String instaLink;
 
-    @Schema(description = "기타 링크", defaultValue = "[{\"title\":\"title1\",\"url\":\"url1\"}," +
-            "{\"title\":\"title2\",\"url\":\"url2\"}," +
-            "{\"title\":\"title3\",\"url\":\"url3\"}]")
+    @Schema(description = "기타 링크", defaultValue = "[{\"title\":\"title1\",\"link\":\"link1\"}," +
+            "{\"title\":\"title2\",\"link\":\"link2\"}," +
+            "{\"title\":\"title3\",\"link\":\"link3\"}]")
     private List<CompanyLink> etcLinks;
 
 }
