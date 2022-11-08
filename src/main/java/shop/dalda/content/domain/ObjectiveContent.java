@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ObjectiveContent extends Content {
     private List<String> options;
-    private int numOfSelect = 1;
+    private int numOfSelect;
 
     @Override
     public String toString() {
