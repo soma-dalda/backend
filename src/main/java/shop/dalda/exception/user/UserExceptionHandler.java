@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.dalda.exception.ExceptionResponse;
 import shop.dalda.exception.user.auth.RefreshTokenException;
 import shop.dalda.exception.user.auth.UserNotFoundException;
+import shop.dalda.exception.user.company.DomainDuplicatedException;
 import shop.dalda.exception.user.company.DomainNotFoundException;
 import shop.dalda.exception.user.company.InvalidDomainException;
 
@@ -49,6 +50,13 @@ public class UserExceptionHandler {
         log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getMessage());
         return ResponseEntity.badRequest().body(new ExceptionResponse(e.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponse> duplicatedDomain(DomainDuplicatedException e) {
+        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getMessage());
+        return ResponseEntity.badRequest().body(new ExceptionResponse(e.getMessage()));
+    }
+
     /**
      * Company Exceptions
      */
