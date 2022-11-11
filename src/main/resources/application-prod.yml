@@ -91,3 +91,9 @@ aws:
     prefix: /config
     profile-separator: _
     name: dalda
+
+# Log
+logging:
+  file:
+    name: server.log
+    path: /home/ec2-user/log
