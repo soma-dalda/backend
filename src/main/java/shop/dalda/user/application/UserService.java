@@ -2,6 +2,7 @@ package shop.dalda.user.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.exception.user.auth.UserNotFoundException;
@@ -46,7 +47,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveOrUpdateCompany(CustomOAuth2User user, UserCompanyRequest requestDto) throws JsonProcessingException {
+    public void saveOrUpdateCompany(CustomOAuth2User user, UserCompanyRequest requestDto) throws JsonProcessingException, DataIntegrityViolationException {
         User findUser = userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
         findUser.setCompany(requestDto);
         userRepository.save(findUser);
