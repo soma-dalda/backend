@@ -6,6 +6,7 @@ import shop.dalda.content.domain.ObjectiveContent;
 import shop.dalda.global.SQLInjectionChecker;
 import shop.dalda.order.domain.Answer;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,10 +18,17 @@ public class ObjectiveContentService extends ContentService {
 
         // 중복 제거
         objectiveContent.setOptions(objectiveContent.getOptions().stream().distinct().collect(Collectors.toList()));
-
         // SQL Injection 처리
         for (int i = 0; i < objectiveContent.getOptions().size(); i++) {
             objectiveContent.getOptions().set(i, SQLInjectionChecker.checkSQLInjection(objectiveContent.getOptions().get(i)));
+        }
+        // 선택 개수 설정
+        if (objectiveContent.getNumOfSelect() == 0) {
+            if (Objects.equals(content.getType(), "singleObjective")) {
+                objectiveContent.setNumOfSelect(1);
+            } else if (Objects.equals(content.getType(), "multiObjective")) {
+                objectiveContent.setNumOfSelect(objectiveContent.getOptions().size());
+            }
         }
     }
 
