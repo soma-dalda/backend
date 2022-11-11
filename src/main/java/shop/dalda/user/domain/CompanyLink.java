@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class CompanyLink {
     String title;
-    String url;
+    String link;
 }
