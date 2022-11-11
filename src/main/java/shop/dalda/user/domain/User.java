@@ -17,7 +17,9 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "users")
+@Table(name = "users",indexes = {
+        @Index(name = "uix_users_company_domain", columnList = "company_domain", unique = true)
+})
 @Entity
 public class User extends BaseTimeEntity{
 
@@ -51,6 +53,7 @@ public class User extends BaseTimeEntity{
 
     private String companyPhone;
 
+    @Column(name = "company_domain")
     private String companyDomain;
 
     private String companyIntroduction;
