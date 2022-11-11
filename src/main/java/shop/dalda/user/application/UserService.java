@@ -2,10 +2,10 @@ package shop.dalda.user.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.dalda.exception.user.auth.UserNotFoundException;
-import shop.dalda.exception.user.company.DomainDuplicatedException;
 import shop.dalda.exception.user.company.DomainNotFoundException;
 import shop.dalda.exception.user.company.InvalidDomainException;
 import shop.dalda.security.auth.user.CustomOAuth2User;
@@ -14,7 +14,6 @@ import shop.dalda.user.domain.repository.UserRepository;
 import shop.dalda.user.ui.dto.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -48,12 +47,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveOrUpdateCompany(CustomOAuth2User user, UserCompanyRequest requestDto) throws JsonProcessingException {
-        // 도메인명 중복검사
-        Optional<UserCompanyResponse> getCompanyByDomain = userRepository.getCompanyByDomain(requestDto.getCompanyDomain());
-        getCompanyByDomain.ifPresent(v -> {
-            throw new DomainDuplicatedException();
-        });
+    public void saveOrUpdateCompany(CustomOAuth2User user, UserCompanyRequest requestDto) throws JsonProcessingException, DataIntegrityViolationException {
         User findUser = userRepository.findById(user.getId()).orElseThrow(UserNotFoundException::new);
         findUser.setCompany(requestDto);
         userRepository.save(findUser);

@@ -2,13 +2,13 @@ package shop.dalda.exception.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.dalda.exception.ExceptionResponse;
 import shop.dalda.exception.user.auth.RefreshTokenException;
 import shop.dalda.exception.user.auth.UserNotFoundException;
-import shop.dalda.exception.user.company.DomainDuplicatedException;
 import shop.dalda.exception.user.company.DomainNotFoundException;
 import shop.dalda.exception.user.company.InvalidDomainException;
 
@@ -52,9 +52,10 @@ public class UserExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> duplicatedDomain(DomainDuplicatedException e) {
-        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), e.getMessage());
-        return ResponseEntity.badRequest().body(new ExceptionResponse(e.getMessage()));
+    public ResponseEntity<ExceptionResponse> duplicatedDomain(DataIntegrityViolationException e) {
+        String message = "이미 사용중인 도메인명 입니다.";
+        log.warn(LOG_FORMAT, e.getClass().getSimpleName(), message);
+        return ResponseEntity.badRequest().body(new ExceptionResponse(message));
     }
 
     /**
