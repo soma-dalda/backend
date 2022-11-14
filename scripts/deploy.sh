@@ -23,7 +23,5 @@ else
 fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
-echo ">>> 로그 폴더 생성" >> /home/ec2-user/deploy.log
-mkdir /home/ec2-user/log
 echo ">>> DEPLOY_JAR 배포"    >> /home/ec2-user/deploy.log
 nohup java -jar -Dspring.profiles.active=dev -Dspring.config.location=$YML_PWD $DEPLOY_JAR >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log &
