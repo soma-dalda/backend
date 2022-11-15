@@ -95,5 +95,4 @@ aws:
 # Log
 logging:
   file:
-    name: server.log
-    path: /home/ec2-user/log
+    name: /home/ec2-user/log/server.log
