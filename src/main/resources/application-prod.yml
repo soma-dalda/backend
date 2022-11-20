@@ -66,10 +66,10 @@ cloud:
 #JWT
 app:
   oauth2:
-    defaultUri : "https://test.dalda.shop/"
-    loginRedirectUri: "https://test.dalda.shop/login"
+    defaultUri : "https://dalda.shop/"
+    loginRedirectUri: "https://dalda.shop/login"
     domain: ".dalda.shop"
-    host: "test.dalda.shop"
+    host: "dalda.shop"
 
 #Swagger
 springdoc:
@@ -95,4 +95,4 @@ aws:
 # Log
 logging:
   file:
-    name: /home/ec2-user/log/server.log
+    name: server.log
